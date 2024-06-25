@@ -1,14 +1,14 @@
 // TO BE REMOVED
 
 // src/main/java/service/BookIssueService.java
-package service;
+package com.library.service;
 
-import dao.BookDAO;
-import dao.BookIssueDAO;
-import dao.StudentDAO;
-import model.Book;
-import model.BookIssue;
-import model.Student;
+import com.library.dao.BookDAO;
+import com.library.dao.BookIssueDAO;
+import com.library.dao.StudentDAO;
+import com.library.model.Book;
+import com.library.model.BookIssue;
+import com.library.model.Student;
 
 import java.sql.SQLException;
 import java.util.Date;

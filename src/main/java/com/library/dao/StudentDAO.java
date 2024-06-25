@@ -1,8 +1,8 @@
 // src/main/java/dao/StudentDAO.java
-package dao;
+package com.library.dao;
 
-import model.Student;
-import util.DatabaseConnection;
+import com.library.model.Student;
+import com.library.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

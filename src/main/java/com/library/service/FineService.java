@@ -1,9 +1,9 @@
 // TO BE REMOVED
 
 // src/main/java/service/FineService.java
-package service;
+package com.library.service;
 
-import dao.BookIssueDAO;
+import com.library.dao.BookIssueDAO;
 
 public class FineService {
     private BookIssueDAO bookIssueDAO;
