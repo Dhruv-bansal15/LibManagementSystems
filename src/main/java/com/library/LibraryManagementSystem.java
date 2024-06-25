@@ -7,11 +7,13 @@ import com.library.service.AdminService;
 import com.library.service.LibrarianService;
 import com.library.service.StudentService;
 import com.library.model.Admin;
+import com.library.model.Book;
 import com.library.model.Librarian;
 import com.library.model.Student;
 import com.library.util.DatabaseConnection;
 import com.library.dao.AdminDAO;
 import com.library.dao.LibrarianDAO;
+import com.library.dao.StudentDAO;
 
 import java.util.Scanner;
 import java.sql.*;
@@ -24,6 +26,8 @@ public class LibraryManagementSystem {
     private static LibrarianService librarianService = new LibrarianService();
     private LibrarianDAO librarianDAO;
     private AdminDAO adminDAO;
+    private StudentDAO studentDAO;
+    private BookDAO bookDAO;
 
     public static void main(String[] args) {
         try {
@@ -275,27 +279,92 @@ public class LibraryManagementSystem {
     }
 
     private static void addStudent() {
-        System.out.println("Managing students...");
+        System.out.println("Enter Student Id: ");
+        int studentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter student username: ");
+        String username = scanner.nextLine();
+        System.out.println("Enter student password: ");
+        String password = scanner.nextLine();
+        System.out.println("Enter student name: ");
+        String name = scanner.nextLine();
+
+        Student temp = new Student(studentId, name, username, password);
+        if(studentDAO.addStudent(temp)){
+            System.out.println("student added successfully");
+            librarianMenu();
+        }else{
+            System.out.println("error");
+        }
+
         // Implementation here
     }
 
     private static void deleteStudent() {
-        System.out.println("Managing students...");
+        System.out.println("Enter Student Id: ");
+        int studentId = Integer.parseInt(scanner.nextLine());
+
+        if(studentDAO.deleteStudent(studentId)){
+            System.out.println("student deleted successfully");
+            librarianMenu();
+        }else{
+            System.out.println("error");
+        }
         // Implementation here
     }
 
     private static void updateStudent() {
-        System.out.println("Managing students...");
-        // Implementation here
+        System.out.println("Enter Student Id: ");
+        int studentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter student updated name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter student updated numIssuedBooks: ");
+        String numIssuedBooks = scanner.nextLine();
+        System.out.println("Enter student updated accountBalance: ");
+        String accountBalance = scanner.nextLine();
+
+        Student temp = new Student(studentId, name, accountBalance, numIssuedBooks);
+        if(studentDAO.updateStudent(studentId)){
+            System.out.println("student deleted successfully");
+            librarianMenu();
+        }else{
+            System.out.println("error");
+        }
+        
     }
 
     private static void addBook() {
-        System.out.println("Managing books...");
+        System.out.println("Enter Book Id: ");
+        int bookId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter book title: ");
+        String title = scanner.nextLine();
+        System.out.println("Enter book author: ");
+        String author = scanner.nextLine();
+        System.out.println("Enter num of copies: ");
+        int availableCopies = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter Section Id: ");
+        int sectionId = Integer.parseInt(scanner.nextLine());
+
+        Book temp = new Book(bookId, title, author, availableCopies, sectionId);
+        if(bookDAO.addBook(temp)){
+            System.out.println("book added successfully");
+            librarianMenu();
+        }else{
+            System.out.println("error");
+        }
+
         // Implementation here
     }
 
     private static void deleteBook() {
-        System.out.println("Managing books...");
+        System.out.println("Enter Book Id: ");
+        int bookId = Integer.parseInt(scanner.nextLine());
+
+        if(bookDAO.deleteBook(bookId)){
+            System.out.println("book deleted successfully");
+            librarianMenu();
+        }else{
+            System.out.println("error");
+        }
         // Implementation here
     }
 

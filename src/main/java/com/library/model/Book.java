@@ -10,23 +10,42 @@ public class Book {
     private int numIssues;
 
     // Constructor for creating a new Book instance
-    public Book(String title, String author, String section, int availableCopies) {
+    public Book(String title, String author, int sectionId, int availableCopies) {
         this.title = title;
         this.author = author;
-        this.section = section;
+        this.sectionId = sectionId;
         this.availableCopies = availableCopies;
     }
 
-    // Constructor with bookId for fetching existing Book from the database
-    public Book(int bookId, String title, String author, String section, int availableCopies, double rating, int numIssues) {
+    // TODO: update db
+    public Book(int bookId, String title, String author, int sectionId, int availableCopies) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
-        this.section = section;
+        this.sectionId = sectionId;
+        this.availableCopies = availableCopies;
+    }
+
+    // TODO: update db
+    public Book(int bookId, int availableCopies, double rating, int numIssues) {
+        this.bookId = bookId;
         this.availableCopies = availableCopies;
         this.rating = rating;
         this.numIssues = numIssues;
     }
+
+    // Constructor with bookId for fetching existing Book from the database
+    public Book(int bookId, String title, String author, int sectionId, int availableCopies, double rating, int numIssues) {
+        this.bookId = bookId;
+        this.title = title;
+        this.author = author;
+        this.sectionId = sectionId;
+        this.availableCopies = availableCopies;
+        this.rating = rating;
+        this.numIssues = numIssues;
+    }
+
+
 
     // Getters and Setters
     public int getBookId() {
@@ -53,12 +72,12 @@ public class Book {
         this.author = author;
     }
 
-    public String getSection() {
-        return section;
+    public int getSectionId() {
+        return sectionId;
     }
 
-    public void setSection(String section) {
-        this.section = section;
+    public void setSectionId(int sectionId) {
+        this.sectionId = sectionId;
     }
 
     public int getAvailableCopies() {
@@ -81,7 +100,7 @@ public class Book {
         return this.numIssues;
     }
 
-    public void addNumIssues() {
-        this.numIssues += 1;
+    public void setNumIssues(int numIssues) {
+        this.numIssues = numIssues;
     }
 }

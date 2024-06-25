@@ -5,11 +5,11 @@ public class Student {
     private String name;
     private String username;
     private String password;
-    private double accountBalance;
+    private int accountBalance;
     private int numIssuedBooks;
 
     // Constructors, getters, and setters
-    public Student(int studentId, String name, String username, String password, double accountBalance, int numIssuedBooks) {
+    public Student(int studentId, String name, String username, String password, int accountBalance, int numIssuedBooks) {
         this.studentId = studentId;
         this.name = name;
         this.username = username;
@@ -23,6 +23,13 @@ public class Student {
         this.name = name;
         this.username = username;
         this.password = password;
+    }
+
+    public Student(int studentId, String name, int accountBalance, int numIssuedBooks) {
+        this.studentId = studentId;
+        this.name = name;
+        this.accountBalance = accountBalance;
+        this.numIssuedBooks = numIssuedBooks;
     }
 
     public int getStudentId() {
@@ -61,7 +68,7 @@ public class Student {
         return accountBalance;
     }
 
-    public void setAccountBalance(double accountBalance) {
+    public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
     }
 
