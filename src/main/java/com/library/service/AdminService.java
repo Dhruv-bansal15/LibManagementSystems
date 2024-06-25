@@ -6,7 +6,6 @@ import com.library.model.Librarian;
 
 public class AdminService {
     private AdminDAO adminDAO;
-    // private AuthenticationService authService;
 
     public AdminService() {
         this.adminDAO = new AdminDAO();
