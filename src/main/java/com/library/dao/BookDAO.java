@@ -89,7 +89,7 @@ public class BookDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, book.getTitle());
             stmt.setString(2, book.getAuthor());
-            stmt.setString(3, book.getSection());
+            stmt.setInt(3, book.getSectionId());
             stmt.setInt(4, book.getAvailableCopies());
             stmt.setDouble(5, book.getRating());
             stmt.setInt(6, book.getNumIssues());

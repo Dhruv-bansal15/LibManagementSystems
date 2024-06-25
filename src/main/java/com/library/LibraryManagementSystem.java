@@ -14,6 +14,7 @@ import com.library.util.DatabaseConnection;
 import com.library.dao.AdminDAO;
 import com.library.dao.LibrarianDAO;
 import com.library.dao.StudentDAO;
+import com.library.dao.BookDAO;
 
 import java.util.Scanner;
 import java.sql.*;
@@ -369,7 +370,22 @@ public class LibraryManagementSystem {
     }
 
     private static void updateBook() {
-        System.out.println("Managing books...");
+        System.out.println("Enter Book Id: ");
+        int bookId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter num of copies: ");
+        int availableCopies = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter rating: ");
+        int rating = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter number of issues: ");
+        int numIssues = Integer.parseInt(scanner.nextLine());
+
+        Book temp = new Book(bookId, availableCopies, rating, numIssues);
+        if(bookDAO.updateBook(temp)){
+            System.out.println("book updated successfully");
+            librarianMenu();
+        }else{
+            System.out.println("error");
+        }
         // Implementation here
     }
 
