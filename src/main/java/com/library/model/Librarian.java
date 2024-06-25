@@ -5,15 +5,15 @@ public class Librarian {
     private String username;
     private String password;
     private String name;
-    private boolean isVerified;
-    private int sectionId; // Section ID assigned to the librarian
+    // private boolean isVerified;
+    private int sectionId; 
 
-    public Librarian(int librarianId, String username, String password, String name, boolean isVerified, int sectionId) {
+    public Librarian(int librarianId, String username, String password, String name, int sectionId) {
         this.librarianId = librarianId;
         this.username = username;
         this.password = password;
         this.name = name;
-        this.isVerified = isVerified;
+        // this.isVerified = isVerified;
         this.sectionId = sectionId;
     }
 
@@ -48,14 +48,6 @@ public class Librarian {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isVerified() {
-        return isVerified;
-    }
-
-    public void setVerified(boolean isVerified) {
-        this.isVerified = isVerified;
     }
 
     public int getSectionId() {

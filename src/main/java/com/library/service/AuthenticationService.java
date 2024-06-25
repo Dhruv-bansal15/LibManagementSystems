@@ -42,14 +42,14 @@ public class AuthenticationService {
     }
 
     // Student login (assuming login by student name)
-    public boolean loginStudent(String name) {
-        Student student = studentDAO.getStudentByName(name);
-        if (student != null && student.isVerified()) {
-            loggedInStudent = student;
-            return true;
-        }
-        return false;
-    }
+    // public boolean loginStudent(String name) {
+    //     Student student = studentDAO.getStudentByName(name);
+    //     if (student != null && student.isVerified()) {
+    //         loggedInStudent = student;
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     // Logout
     public void logout() {

@@ -17,13 +17,6 @@ public class DatabaseConnection {
         props.setProperty("user", user);
         props.setProperty("password", password);
         props.setProperty("internal_logon", "SYSDBA");
-        // Connection con = DriverManager.getConnection(url, props);
-        // Statement stmt = con.createStatement();
-        // ResultSet rs = stmt.executeQuery("select * from emp");
-        // while (rs.next())
-        //     System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getString(3));
-
-        // con.close();
         return DriverManager.getConnection(url, props);
     }
 

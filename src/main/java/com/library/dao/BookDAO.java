@@ -76,7 +76,7 @@ public class BookDAO {
                 books.add(book);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
         }
         return books;
     }
@@ -98,7 +98,7 @@ public class BookDAO {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
             return false;
         }
     }
@@ -113,7 +113,7 @@ public class BookDAO {
             int rowsDeleted = stmt.executeUpdate();
             return rowsDeleted > 0;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
             return false;
         }
     }

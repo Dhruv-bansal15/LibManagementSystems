@@ -4,7 +4,7 @@ public class Book {
     private int bookId;
     private String title;
     private String author;
-    private String section;
+    private int sectionId;
     private int availableCopies;
     private double rating;
     private int numIssues;

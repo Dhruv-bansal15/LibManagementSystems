@@ -10,8 +10,9 @@ import com.library.model.Admin;
 import com.library.model.Librarian;
 import com.library.model.Student;
 import com.library.util.DatabaseConnection;
+import com.library.dao.AdminDAO;
+import com.library.dao.LibrarianDAO;
 
-import java.sql.PreparedStatement;
 import java.util.Scanner;
 import java.sql.*;
 
@@ -21,6 +22,8 @@ public class LibraryManagementSystem {
     private static StudentService studentService = new StudentService();
     private static AdminService adminService = new AdminService();
     private static LibrarianService librarianService = new LibrarianService();
+    private LibrarianDAO librarianDAO;
+    private AdminDAO adminDAO;
 
     public static void main(String[] args) {
         try {
@@ -111,22 +114,22 @@ public class LibraryManagementSystem {
     private static void adminMenu() {
         while (true) {
             System.out.println("Admin Menu: ");
-            System.out.println("1- Verify Librarians");
-            System.out.println("2- Assign Librarian Section");
-            System.out.println("3- Add New Admin");
+            System.out.println("1- Add Librarian");
+            System.out.println("2- Add New Admin");
+            System.out.println("3- Delete Librarian");
             System.out.println("0- Logout");
 
             int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
                 case 1:
-                    verifyLibrarians();
+                    addNewLibrarian();
                     break;
                 case 2:
-                    assignLibrarianSection();
+                    addNewAdmin();
                     break;
                 case 3:
-                    addNewAdmin();
+                    deleteLibrarian();
                     break;
                 case 0:
                     authService.logout();
@@ -141,34 +144,42 @@ public class LibraryManagementSystem {
     private static void librarianMenu() {
         while (true) {
             System.out.println("Librarian Menu: ");
-            System.out.println("1- CRUD Student Database");
-            System.out.println("2- CRUD Book Database");
-            System.out.println("3- Issue Books to Students");
-            System.out.println("4- Return Books from Students");
-            System.out.println("5- Reserve Books for Students");
-            System.out.println("6- Verify Students");
+            System.out.println("1- Add Student");
+            System.out.println("2- Delete Student");
+            System.out.println("3- Update Student");
+            System.out.println("4- Add Book");
+            System.out.println("5- Delete Book");
+            System.out.println("6- Update Book");
+            System.out.println("7- Issue Books to Students");
+            System.out.println("8- Return Books from Students");
             System.out.println("0- Logout");
 
             int choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
                 case 1:
-                    manageStudents();
+                    addStudent();
                     break;
                 case 2:
-                    manageBooks();
+                    deleteStudent();
                     break;
                 case 3:
-                    issueBooks();
+                    updateStudent();
                     break;
                 case 4:
-                    returnBooks();
+                    addBook();
                     break;
                 case 5:
-                    reserveBooks();
+                    deleteBook();
                     break;
                 case 6:
-                    verifyStudents();
+                    updateBook();
+                    break;
+                case 7:
+                    issueBook();
+                    break;
+                case 8:
+                    returnBook();
                     break;
                 case 0:
                     authService.logout();
@@ -209,48 +220,97 @@ public class LibraryManagementSystem {
         }
     }
 
-    private static void verifyLibrarians() {
-        System.out.println("Verifying librarians...");
-        // Implementation here
+    private static void addNewLibrarian() {
+        System.out.println("Enter librarian Id: ");
+        int librarianId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter librarian username: ");
+        String username = scanner.nextLine();
+        System.out.println("Enter librarian password: ");
+        String password = scanner.nextLine();
+        System.out.println("Enter librarian name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter librarian sectionId: ");
+        int sectionId = Integer.parseInt(scanner.nextLine());
+        Librarian temp = new Librarian(librarianId, username, password, name, sectionId);
+
+        if (librarianDAO.addLibrarian(temp)) {
+                System.out.println("librarian added successfully");
+                adminMenu();
+        } else{
+                System.out.println("error");
+        }
+        
     }
 
-    private static void assignLibrarianSection() {
-        System.out.println("Assigning section to librarian...");
-        // Implementation here
+    private static void deleteLibrarian() {
+        System.out.println("Enter librarian Id: ");
+        int librarianId = Integer.parseInt(scanner.nextLine());
+        boolean ans = librarianDAO.deleteLibrarian(librarianId);
+        if (ans) {
+                System.out.println("librarian deleted successfully");
+                adminMenu();
+        } else{
+                System.out.println("error");
+        }
+        
     }
 
     private static void addNewAdmin() {
-        System.out.println("Adding a new admin...");
-        // Implementation here
+        System.out.println("Enter Admin Id: ");
+        int librarianId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter admin username: ");
+        String username = scanner.nextLine();
+        System.out.println("Enter admin password: ");
+        String password = scanner.nextLine();
+        System.out.println("Enter admin name: ");
+        String name = scanner.nextLine();
+        Admin temp = new Admin(librarianId, username, password, name);
+
+        if(adminDAO.addAdmin(temp)){
+                System.out.println("admin added successfully");
+                adminMenu();
+        }else{
+            System.out.println("error");
+        }
     }
 
-    private static void manageStudents() {
+    private static void addStudent() {
         System.out.println("Managing students...");
         // Implementation here
     }
 
-    private static void manageBooks() {
+    private static void deleteStudent() {
+        System.out.println("Managing students...");
+        // Implementation here
+    }
+
+    private static void updateStudent() {
+        System.out.println("Managing students...");
+        // Implementation here
+    }
+
+    private static void addBook() {
         System.out.println("Managing books...");
         // Implementation here
     }
 
-    private static void issueBooks() {
+    private static void deleteBook() {
+        System.out.println("Managing books...");
+        // Implementation here
+    }
+
+    private static void updateBook() {
+        System.out.println("Managing books...");
+        // Implementation here
+    }
+
+    private static void issueBook() {
         System.out.println("Issuing books...");
         // Implementation here
     }
 
-    private static void returnBooks() {
+    private static void returnBook() {
         System.out.println("Returning books...");
-        // Implementation here
-    }
-
-    private static void reserveBooks() {
-        System.out.println("Reserving books...");
-        // Implementation here
-    }
-
-    private static void verifyStudents() {
-        System.out.println("Verifying students...");
         // Implementation here
     }
 
