@@ -77,11 +77,11 @@ public class Book {
         this.rating = rating;
     }
 
-    public int getIssues() {
+    public int getNumIssues() {
         return this.numIssues;
     }
 
-    public void addIssues() {
+    public void addNumIssues() {
         this.numIssues += 1;
     }
 }

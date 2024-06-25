@@ -1,30 +1,19 @@
 package com.library.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Student {
     private int studentId;
     private String name;
-    private List<Transaction> transactions;
-    private boolean verified;
+    private boolean isVerified;
+    private double accountBalance;
 
-    // Constructor for creating a new Student instance
-    public Student(String name) {
-        this.name = name;
-        this.transactions = new ArrayList<>();
-        this.verified = false; // Students start as unverified
-    }
-
-    // Constructor with studentId for fetching existing Student from the database
-    public Student(int studentId, String name, boolean verified) {
+    // Constructors, getters, and setters
+    public Student(int studentId, String name, boolean isVerified, double accountBalance) {
         this.studentId = studentId;
         this.name = name;
-        this.verified = verified;
-        this.transactions = new ArrayList<>();
+        this.isVerified = isVerified;
+        this.accountBalance = accountBalance;
     }
 
-    // Getters and Setters
     public int getStudentId() {
         return studentId;
     }
@@ -41,20 +30,20 @@ public class Student {
         this.name = name;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
     public boolean isVerified() {
-        return verified;
+        return isVerified;
     }
 
     public void setVerified(boolean verified) {
-        this.verified = verified;
+        isVerified = verified;
+    }
+
+    public double getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(double accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
     @Override
@@ -62,8 +51,8 @@ public class Student {
         return "Student{" +
                 "studentId=" + studentId +
                 ", name='" + name + '\'' +
-                ", transactions=" + transactions +
-                ", verified=" + verified +
+                ", isVerified=" + isVerified +
+                ", accountBalance=" + accountBalance +
                 '}';
     }
 }

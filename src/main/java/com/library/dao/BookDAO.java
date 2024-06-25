@@ -1,75 +1,120 @@
-// src/main/java/dao/BookDAO.java
-package dao;
+package com.library.dao;
 
-import model.Book;
-import util.DatabaseConnection;
+import com.library.model.Book;
+import com.library.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookDAO {
-    public void addBook(Book book) throws SQLException {
-        String query = "INSERT INTO Book VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, book.getBookId());
-            statement.setString(2, book.getBookName());
-            statement.setString(3, book.getAuthor());
-            statement.setString(4, book.getGenre());
-            statement.setString(5, book.getSection());
-            statement.setInt(6, book.getNumCopiesAvailable());
-            statement.setDouble(7, book.getRating());
-            statement.setInt(8, book.getNumIssues());
-            statement.executeUpdate();
+    // Method to add a new book to the database
+    public boolean addBook(Book book) {
+        String query = "INSERT INTO books (title, author, section, available_copies, rating, num_issues) " +
+                       "VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, book.getTitle());
+            stmt.setString(2, book.getAuthor());
+            stmt.setString(3, book.getSection());
+            stmt.setInt(4, book.getAvailableCopies());
+            stmt.setDouble(5, book.getRating());
+            stmt.setInt(6, book.getNumIssues());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 
-    public Book getBook(String bookId) throws SQLException {
-        String query = "SELECT * FROM Book WHERE book_id = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, bookId);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Book book = new Book();
-                book.setBookId(resultSet.getString("book_id"));
-                book.setBookName(resultSet.getString("book_name"));
-                book.setAuthor(resultSet.getString("author"));
-                book.setGenre(resultSet.getString("genre"));
-                book.setSection(resultSet.getString("section"));
-                book.setNumCopiesAvailable(resultSet.getInt("num_copies_available"));
-                book.setRating(resultSet.getDouble("rating"));
-                book.setNumIssues(resultSet.getInt("num_issues"));
-                return book;
+    // Method to fetch a book by bookId from the database
+    public Book getBookById(int bookId) {
+        String query = "SELECT * FROM books WHERE book_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, bookId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    String author = rs.getString("author");
+                    String section = rs.getString("section");
+                    int availableCopies = rs.getInt("available_copies");
+                    double rating = rs.getDouble("rating");
+                    int numIssues = rs.getInt("num_issues");
+
+                    return new Book(bookId, title, author, section, availableCopies, rating, numIssues);
+                }
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return null;
     }
 
-    public void updateBook(Book book) throws SQLException {
-        String query = "UPDATE Book SET book_name = ?, author = ?, genre = ?, section = ?, num_copies_available = ?, rating = ?, num_issues = ? WHERE book_id = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, book.getBookName());
-            statement.setString(2, book.getAuthor());
-            statement.setString(3, book.getGenre());
-            statement.setString(4, book.getSection());
-            statement.setInt(5, book.getNumCopiesAvailable());
-            statement.setDouble(6, book.getRating());
-            statement.setInt(7, book.getNumIssues());
-            statement.setString(8, book.getBookId());
-            statement.executeUpdate();
+    // Method to fetch all books from the database
+    public List<Book> getAllBooks() {
+        List<Book> books = new ArrayList<>();
+        String query = "SELECT * FROM books";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int bookId = rs.getInt("book_id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                String section = rs.getString("section");
+                int availableCopies = rs.getInt("available_copies");
+                double rating = rs.getDouble("rating");
+                int numIssues = rs.getInt("num_issues");
+
+                Book book = new Book(bookId, title, author, section, availableCopies, rating, numIssues);
+                books.add(book);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return books;
+    }
+
+    // Method to update an existing book in the database
+    public boolean updateBook(Book book) {
+        String query = "UPDATE books SET title = ?, author = ?, section = ?, " +
+                       "available_copies = ?, rating = ?, num_issues = ? WHERE book_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, book.getTitle());
+            stmt.setString(2, book.getAuthor());
+            stmt.setString(3, book.getSection());
+            stmt.setInt(4, book.getAvailableCopies());
+            stmt.setDouble(5, book.getRating());
+            stmt.setInt(6, book.getNumIssues());
+            stmt.setInt(7, book.getBookId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 
-    public void deleteBook(String bookId) throws SQLException {
-        String query = "DELETE FROM Book WHERE book_id = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, bookId);
-            statement.executeUpdate();
+    // Method to delete a book from the database
+    public boolean deleteBook(int bookId) {
+        String query = "DELETE FROM books WHERE book_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, bookId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

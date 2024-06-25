@@ -1,535 +1,255 @@
 package com.library;
-// src/main/java/Main.java
-import dao.*;
-import model.*;
-import service.*;
 
-import java.sql.SQLException;
+// import com.library.service.AuthenticationService;
+// import com.library.service.AdminService;
+// import com.library.service.LibrarianService;
+// import com.library.service.StudentService;
+// import com.library.model.Admin;
+// import com.library.model.Librarian;
+// import com.library.model.Student;
+
 import java.util.Scanner;
 
 public class LibraryManagementSystem {
-    private static StudentDAO studentDAO = new StudentDAO();
-    private static BookDAO bookDAO = new BookDAO();
-    private static LibrarianDAO librarianDAO = new LibrarianDAO();
-    private static AdminDAO adminDAO = new AdminDAO();
-    private static FineService fineService = new FineService();
-    private static BookIssueService bookIssueService = new BookIssueService();
+    private static Scanner sc = new Scanner(System.in);
+    // private static AuthenticationService authService = new AuthenticationService();
+    // private static StudentService studentService = new StudentService();
+    // private static AdminService adminService = new AdminService();
+    // private static LibrarianService librarianService = new LibrarianService();
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to the Library Management System");
 
         while (true) {
-            System.out.println("1. Librarian");
-            System.out.println("2. Admin");
-            System.out.println("3. Exit");
+            System.out.println("Please select your role (1-Admin, 2-Librarian, 3-Student, 0-Exit): ");
+            int role = Integer.parseInt(sc.nextLine());
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
+            switch (role) {
                 case 1:
-                    librarianMenu(scanner);
+                    // adminLogin();
+                    System.out.println("admin login");
                     break;
-                case 2:
-                    adminMenu(scanner);
-                    break;
-                case 3:
-                    System.exit(0);
-                    break;
+                // case 2:
+                //     librarianLogin();
+                //     break;
+                // case 3:
+                //     studentLogin();
+                //     break;
+                case 0:
+                    System.out.println("Exiting...");
+                    return;
                 default:
-                    System.out.println("Invalid choice");
+                    System.out.println("Invalid option, please try again.");
             }
         }
     }
 
-    private static void librarianMenu(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
+//     private static void adminLogin() {
+//         System.out.println("Enter admin username: ");
+//         String username = scanner.nextLine();
+//         System.out.println("Enter admin password: ");
+//         String password = scanner.nextLine();
 
-        try {
-            Librarian librarian = librarianDAO.getLibrarian(librarianId);
+//         if (authService.loginAdmin(username, password)) {
+//             Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
+//             if (loggedInAdmin != null) {
+//                 System.out.println("Admin logged in successfully.");
+//                 adminMenu();
+//             } else {
+//                 System.out.println("Invalid admin credentials.");
+//             }
+//         }
+//     }
 
-            if (librarian != null && librarian.isApproved()) {
-                while (true) {
-                    System.out.println("1. Add Student");
-                    System.out.println("2. View Student");
-                    System.out.println("3. Update Student");
-                    System.out.println("4. Delete Student");
-                    System.out.println("5. Add Book");
-                    System.out.println("6. View Book");
-                    System.out.println("7. Update Book");
-                    System.out.println("8. Delete Book");
-                    System.out.println("9. Issue Book");
-                    System.out.println("10. Return Book");
-                    System.out.println("11. Reserve Book");
-                    System.out.println("12. Notify Admin for New Books");
-                    System.out.println("13. Back");
+//     // private static void librarianLogin() {
+//     //     System.out.println("Enter librarian username: ");
+//     //     String username = scanner.nextLine();
+//     //     System.out.println("Enter librarian password: ");
+//     //     String password = scanner.nextLine();
 
-                    int choice = scanner.nextInt();
-                    scanner.nextLine();
+//     //     if (authService.loginLibrarian(username, password)) {
+//     //         Librarian loggedInLibrarian = AuthenticationService.getLoggedInLibrarian();
+//     //         if (loggedInLibrarian != null) {
+//     //             System.out.println("Librarian logged in successfully.");
+//     //             librarianMenu();
+//     //         } else {
+//     //             System.out.println("Invalid librarian credentials.");
+//     //         }
+//     //     }
+//     // }
 
-                    switch (choice) {
-                        case 1:
-                            addStudent(scanner);
-                            break;
-                        case 2:
-                            viewStudent(scanner);
-                            break;
-                        case 3:
-                            updateStudent(scanner);
-                            break;
-                        case 4:
-                            deleteStudent(scanner);
-                            break;
-                        case 5:
-                            addBook(scanner);
-                            break;
-                        case 6:
-                            viewBook(scanner);
-                            break;
-                        case 7:
-                            updateBook(scanner);
-                            break;
-                        case 8:
-                            deleteBook(scanner);
-                            break;
-                        case 9:
-                            issueBook(scanner);
-                            break;
-                        case 10:
-                            returnBook(scanner);
-                            break;
-                        case 11:
-                            reserveBook(scanner);
-                            break;
-                        case 12:
-                            notifyAdmin(scanner);
-                            break;
-                        case 13:
-                            return;
-                        default:
-                            System.out.println("Invalid choice");
-                    }
-                }
-            } else {
-                System.out.println("Librarian not approved or invalid ID");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void studentLogin() {
+//     //     // Assuming student login mechanism (e.g., name as username)
+//     //     System.out.println("Enter student name: ");
+//     //     String studentName = scanner.nextLine();
 
-    private static void adminMenu(Scanner scanner) {
-        System.out.println("Enter Admin ID:");
-        String adminId = scanner.nextLine();
+//     //     Student student = studentService.getStudentByName(studentName);
+//     //     if (student != null) {
+//     //         System.out.println("Student logged in successfully.");
+//     //         studentMenu(student);
+//     //     } else {
+//     //         System.out.println("Student not found.");
+//     //     }
+//     // }
 
-        try {
-            Admin admin = adminDAO.getAdmin(adminId);
+//     private static void adminMenu() {
+//         while (true) {
+//             System.out.println("Admin Menu: ");
+//             System.out.println("1- Verify Librarians");
+//             System.out.println("2- Assign Librarian Section");
+//             System.out.println("3- Add New Admin");
+//             System.out.println("0- Logout");
 
-            if (admin != null) {
-                while (true) {
-                    System.out.println("1. Add Librarian");
-                    System.out.println("2. View Librarian");
-                    System.out.println("3. Update Librarian");
-                    System.out.println("4. Delete Librarian");
-                    System.out.println("5. Approve Librarian");
-                    System.out.println("6. Assign Section to Librarian");
-                    System.out.println("7. Add Student");
-                    System.out.println("8. View Student");
-                    System.out.println("9. Update Student");
-                    System.out.println("10. Delete Student");
-                    System.out.println("11. Back");
+//             int choice = Integer.parseInt(scanner.nextLine());
 
-                    int choice = scanner.nextInt();
-                    scanner.nextLine();
+//             switch (choice) {
+//                 case 1:
+//                     verifyLibrarians();
+//                     break;
+//                 case 2:
+//                     assignLibrarianSection();
+//                     break;
+//                 case 3:
+//                     addNewAdmin();
+//                     break;
+//                 case 0:
+//                     authService.logout();
+//                     System.out.println("Logged out.");
+//                     return;
+//                 default:
+//                     System.out.println("Invalid choice, please try again.");
+//             }
+//         }
+//     }
 
-                    switch (choice) {
-                        case 1:
-                            addLibrarian(scanner);
-                            break;
-                        case 2:
-                            viewLibrarian(scanner);
-                            break;
-                        case 3:
-                            updateLibrarian(scanner);
-                            break;
-                        case 4:
-                            deleteLibrarian(scanner);
-                            break;
-                        case 5:
-                            approveLibrarian(scanner);
-                            break;
-                        case 6:
-                            assignSection(scanner);
-                            break;
-                        case 7:
-                            addStudent(scanner);
-                            break;
-                        case 8:
-                            viewStudent(scanner);
-                            break;
-                        case 9:
-                            updateStudent(scanner);
-                            break;
-                        case 10:
-                            deleteStudent(scanner);
-                            break;
-                        case 11:
-                            return;
-                        default:
-                            System.out.println("Invalid choice");
-                    }
-                }
-            } else {
-                System.out.println("Invalid Admin ID");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void librarianMenu() {
+//     //     while (true) {
+//     //         System.out.println("Librarian Menu: ");
+//     //         System.out.println("1- CRUD Student Database");
+//     //         System.out.println("2- CRUD Book Database");
+//     //         System.out.println("3- Issue Books to Students");
+//     //         System.out.println("4- Return Books from Students");
+//     //         System.out.println("5- Reserve Books for Students");
+//     //         System.out.println("6- Verify Students");
+//     //         System.out.println("0- Logout");
 
-    private static void addStudent(Scanner scanner) {
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
-        System.out.println("Enter Student Name:");
-        String name = scanner.nextLine();
+//     //         int choice = Integer.parseInt(scanner.nextLine());
 
-        Student student = new Student();
-        student.setStudentId(studentId);
-        student.setName(name);
-        student.setAllBooksIssued("");
-        student.setCurrentlyIssuedBooks("");
-        student.setFineAmount(0);
+//     //         switch (choice) {
+//     //             case 1:
+//     //                 manageStudents();
+//     //                 break;
+//     //             case 2:
+//     //                 manageBooks();
+//     //                 break;
+//     //             case 3:
+//     //                 issueBooks();
+//     //                 break;
+//     //             case 4:
+//     //                 returnBooks();
+//     //                 break;
+//     //             case 5:
+//     //                 reserveBooks();
+//     //                 break;
+//     //             case 6:
+//     //                 verifyStudents();
+//     //                 break;
+//     //             case 0:
+//     //                 authService.logout();
+//     //                 System.out.println("Logged out.");
+//     //                 return;
+//     //             default:
+//     //                 System.out.println("Invalid choice, please try again.");
+//     //         }
+//     //     }
+//     // }
 
-        try {
-            studentDAO.addStudent(student);
-            System.out.println("Student added successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void studentMenu(Student student) {
+//     //     while (true) {
+//     //         System.out.println("Student Menu: ");
+//     //         System.out.println("1- View Issued Books");
+//     //         System.out.println("2- View Reserved Books");
+//     //         System.out.println("3- View Account Balance");
+//     //         System.out.println("0- Logout");
 
-    private static void viewStudent(Scanner scanner) {
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
+//     //         int choice = Integer.parseInt(scanner.nextLine());
 
-        try {
-            Student student = studentDAO.getStudent(studentId);
-            if (student != null) {
-                System.out.println("Student ID: " + student.getStudentId());
-                System.out.println("Name: " + student.getName());
-                System.out.println("All Books Issued: " + student.getAllBooksIssued());
-                System.out.println("Currently Issued Books: " + student.getCurrentlyIssuedBooks());
-                System.out.println("Fine Amount: " + student.getFineAmount());
-            } else {
-                System.out.println("Student not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     //         switch (choice) {
+//     //             case 1:
+//     //                 viewIssuedBooks(student);
+//     //                 break;
+//     //             case 2:
+//     //                 viewReservedBooks(student);
+//     //                 break;
+//     //             case 3:
+//     //                 viewAccountBalance(student);
+//     //                 break;
+//     //             case 0:
+//     //                 System.out.println("Logged out.");
+//     //                 return;
+//     //             default:
+//     //                 System.out.println("Invalid choice, please try again.");
+//     //         }
+//     //     }
+//     // }
 
-    private static void updateStudent(Scanner scanner) {
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
+//     private static void verifyLibrarians() {
+//         System.out.println("Verifying librarians...");
+//         // Implementation here
+//     }
 
-        try {
-            Student student = studentDAO.getStudent(studentId);
-            if (student != null) {
-                System.out.println("Enter new Name:");
-                String name = scanner.nextLine();
-                student.setName(name);
-                studentDAO.updateStudent(student);
-                System.out.println("Student updated successfully");
-            } else {
-                System.out.println("Student not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     private static void assignLibrarianSection() {
+//         System.out.println("Assigning section to librarian...");
+//         // Implementation here
+//     }
 
-    private static void deleteStudent(Scanner scanner) {
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
+//     private static void addNewAdmin() {
+//         System.out.println("Adding a new admin...");
+//         // Implementation here
+//     }
 
-        try {
-            studentDAO.deleteStudent(studentId);
-            System.out.println("Student deleted successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void manageStudents() {
+//     //     System.out.println("Managing students...");
+//     //     // Implementation here
+//     // }
 
-    private static void addBook(Scanner scanner) {
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
-        System.out.println("Enter Book Name:");
-        String bookName = scanner.nextLine();
-        System.out.println("Enter Author:");
-        String author = scanner.nextLine();
-        System.out.println("Enter Genre:");
-        String genre = scanner.nextLine();
-        System.out.println("Enter Section:");
-        String section = scanner.nextLine();
-        System.out.println("Enter Number of Copies Available:");
-        int numCopiesAvailable = scanner.nextInt();
-        scanner.nextLine();
+//     // private static void manageBooks() {
+//     //     System.out.println("Managing books...");
+//     //     // Implementation here
+//     // }
 
-        Book book = new Book();
-        book.setBookId(bookId);
-        book.setBookName(bookName);
-        book.setAuthor(author);
-        book.setGenre(genre);
-        book.setSection(section);
-        book.setNumCopiesAvailable(numCopiesAvailable);
-        book.setRating(0);
-        book.setNumIssues(0);
+//     // private static void issueBooks() {
+//     //     System.out.println("Issuing books...");
+//     //     // Implementation here
+//     // }
 
-        try {
-            bookDAO.addBook(book);
-            System.out.println("Book added successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void returnBooks() {
+//     //     System.out.println("Returning books...");
+//     //     // Implementation here
+//     // }
 
-    private static void viewBook(Scanner scanner) {
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
+//     // private static void reserveBooks() {
+//     //     System.out.println("Reserving books...");
+//     //     // Implementation here
+//     // }
 
-        try {
-            Book book = bookDAO.getBook(bookId);
-            if (book != null) {
-                System.out.println("Book ID: " + book.getBookId());
-                System.out.println("Book Name: " + book.getBookName());
-                System.out.println("Author: " + book.getAuthor());
-                System.out.println("Genre: " + book.getGenre());
-                System.out.println("Section: " + book.getSection());
-                System.out.println("Number of Copies Available: " + book.getNumCopiesAvailable());
-                System.out.println("Rating: " + book.getRating());
-                System.out.println("Number of Issues: " + book.getNumIssues());
-            } else {
-                System.out.println("Book not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void verifyStudents() {
+//     //     System.out.println("Verifying students...");
+//     //     // Implementation here
+//     // }
 
-    private static void updateBook(Scanner scanner) {
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
+//     // private static void viewIssuedBooks(Student student) {
+//     //     System.out.println("Viewing issued books for student: " + student.getName());
+//     //     // Implementation here
+//     // }
 
-        try {
-            Book book = bookDAO.getBook(bookId);
-            if (book != null) {
-                System.out.println("Enter new Book Name:");
-                String bookName = scanner.nextLine();
-                System.out.println("Enter new Author:");
-                String author = scanner.nextLine();
-                System.out.println("Enter new Genre:");
-                String genre = scanner.nextLine();
-                System.out.println("Enter new Section:");
-                String section = scanner.nextLine();
-                System.out.println("Enter new Number of Copies Available:");
-                int numCopiesAvailable = scanner.nextInt();
-                scanner.nextLine();
+//     // private static void viewReservedBooks(Student student) {
+//     //     System.out.println("Viewing reserved books for student: " + student.getName());
+//     //     // Implementation here
+//     // }
 
-                book.setBookName(bookName);
-                book.setAuthor(author);
-                book.setGenre(genre);
-                book.setSection(section);
-                book.setNumCopiesAvailable(numCopiesAvailable);
-
-                bookDAO.updateBook(book);
-                System.out.println("Book updated successfully");
-            } else {
-                System.out.println("Book not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void deleteBook(Scanner scanner) {
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
-
-        try {
-            bookDAO.deleteBook(bookId);
-            System.out.println("Book deleted successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void issueBook(Scanner scanner) {
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
-
-        try {
-            bookIssueService.issueBook(studentId, bookId);
-            System.out.println("Book issued successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void returnBook(Scanner scanner) {
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
-        System.out.println("Enter Rating (1-10):");
-        int rating = scanner.nextInt();
-        scanner.nextLine();
-
-        try {
-            bookIssueService.returnBook(studentId, bookId, rating);
-            System.out.println("Book returned successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void reserveBook(Scanner scanner) {
-        // Logic to reserve book
-        System.out.println("Enter Student ID:");
-        String studentId = scanner.nextLine();
-        System.out.println("Enter Book ID:");
-        String bookId = scanner.nextLine();
-
-        // Add reservation logic here
-        System.out.println("Book reserved successfully");
-    }
-
-    private static void notifyAdmin(Scanner scanner) {
-        // Logic to notify admin for new books
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-        System.out.println("Enter Book Name:");
-        String bookName = scanner.nextLine();
-
-        // Add notification logic here
-        System.out.println("Admin notified successfully");
-    }
-
-    private static void addLibrarian(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-        System.out.println("Enter Librarian Name:");
-        String name = scanner.nextLine();
-        System.out.println("Enter Section:");
-        String section = scanner.nextLine();
-
-        Librarian librarian = new Librarian();
-        librarian.setLibrarianId(librarianId);
-        librarian.setName(name);
-        librarian.setSection(section);
-        librarian.setApproved(false);
-
-        try {
-            librarianDAO.addLibrarian(librarian);
-            System.out.println("Librarian added successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void viewLibrarian(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-
-        try {
-            Librarian librarian = librarianDAO.getLibrarian(librarianId);
-            if (librarian != null) {
-                System.out.println("Librarian ID: " + librarian.getLibrarianId());
-                System.out.println("Name: " + librarian.getName());
-                System.out.println("Section: " + librarian.getSection());
-                System.out.println("Approved: " + librarian.isApproved());
-            } else {
-                System.out.println("Librarian not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void updateLibrarian(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-
-        try {
-            Librarian librarian = librarianDAO.getLibrarian(librarianId);
-            if (librarian != null) {
-                System.out.println("Enter new Name:");
-                String name = scanner.nextLine();
-                System.out.println("Enter new Section:");
-                String section = scanner.nextLine();
-
-                librarian.setName(name);
-                librarian.setSection(section);
-
-                librarianDAO.updateLibrarian(librarian);
-                System.out.println("Librarian updated successfully");
-            } else {
-                System.out.println("Librarian not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void deleteLibrarian(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-
-        try {
-            librarianDAO.deleteLibrarian(librarianId);
-            System.out.println("Librarian deleted successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void approveLibrarian(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-
-        try {
-            Librarian librarian = librarianDAO.getLibrarian(librarianId);
-            if (librarian != null) {
-                librarian.setApproved(true);
-                librarianDAO.updateLibrarian(librarian);
-                System.out.println("Librarian approved successfully");
-            } else {
-                System.out.println("Librarian not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void assignSection(Scanner scanner) {
-        System.out.println("Enter Librarian ID:");
-        String librarianId = scanner.nextLine();
-        System.out.println("Enter new Section:");
-        String section = scanner.nextLine();
-
-        try {
-            Librarian librarian = librarianDAO.getLibrarian(librarianId);
-            if (librarian != null) {
-                librarian.setSection(section);
-                librarianDAO.updateLibrarian(librarian);
-                System.out.println("Section assigned successfully");
-            } else {
-                System.out.println("Librarian not found");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//     // private static void viewAccountBalance(Student student) {
+//     //     System.out.println("Account balance for student: " + student.getName() + " is " + student.getAccountBalance());
+//     //     // Implementation here
+//     // }
 }

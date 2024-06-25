@@ -5,26 +5,19 @@ public class Librarian {
     private String username;
     private String password;
     private String name;
-    private String section;
+    private boolean isVerified;
+    private int sectionId; // Section ID assigned to the librarian
 
-    // Constructor for creating a new Librarian instance
-    public Librarian(String username, String password, String name, String section) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.section = section;
-    }
-
-    // Constructor with librarianId for fetching existing Librarian from the database
-    public Librarian(int librarianId, String username, String password, String name, String section) {
+    public Librarian(int librarianId, String username, String password, String name, boolean isVerified, int sectionId) {
         this.librarianId = librarianId;
         this.username = username;
         this.password = password;
         this.name = name;
-        this.section = section;
+        this.isVerified = isVerified;
+        this.sectionId = sectionId;
     }
 
-    // Getters and Setters
+    // Getters and setters
     public int getLibrarianId() {
         return librarianId;
     }
@@ -57,22 +50,19 @@ public class Librarian {
         this.name = name;
     }
 
-    public String getSection() {
-        return section;
+    public boolean isVerified() {
+        return isVerified;
     }
 
-    public void setSection(String section) {
-        this.section = section;
+    public void setVerified(boolean isVerified) {
+        this.isVerified = isVerified;
     }
 
-    @Override
-    public String toString() {
-        return "Librarian{" +
-                "librarianId=" + librarianId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", section='" + section + '\'' +
-                '}';
+    public int getSectionId() {
+        return sectionId;
+    }
+
+    public void setSectionId(int sectionId) {
+        this.sectionId = sectionId;
     }
 }

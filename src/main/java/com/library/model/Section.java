@@ -2,23 +2,14 @@ package com.library.model;
 
 public class Section {
     private int sectionId;
-    private String name;
-    private int librarianId;
+    private String sectionName;
 
-    // Constructor for creating a new Section instance
-    public Section(String name, int librarianId) {
-        this.name = name;
-        this.librarianId = librarianId;
-    }
-
-    // Constructor with sectionId for fetching existing Section from the database
-    public Section(int sectionId, String name, int librarianId) {
+    public Section(int sectionId, String sectionName) {
         this.sectionId = sectionId;
-        this.name = name;
-        this.librarianId = librarianId;
+        this.sectionName = sectionName;
     }
 
-    // Getters and Setters
+    // Getters and setters
     public int getSectionId() {
         return sectionId;
     }
@@ -27,28 +18,11 @@ public class Section {
         this.sectionId = sectionId;
     }
 
-    public String getName() {
-        return name;
+    public String getSectionName() {
+        return sectionName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getLibrarianId() {
-        return librarianId;
-    }
-
-    public void setLibrarianId(int librarianId) {
-        this.librarianId = librarianId;
-    }
-
-    @Override
-    public String toString() {
-        return "Section{" +
-                "sectionId=" + sectionId +
-                ", name='" + name + '\'' +
-                ", librarianId=" + librarianId +
-                '}';
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
     }
 }
