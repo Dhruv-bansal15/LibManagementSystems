@@ -1,0 +1,116 @@
+// src/main/java/dao/StudentDAO.java
+package com.library.dao;
+
+import com.library.model.Student;
+import com.library.model.Transaction;
+import com.library.util.DatabaseConnection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentDAO {
+
+    public boolean addStudent(Student student) {
+        String query = "INSERT INTO student (studentId, name, username, password, accountBalance, numIssuedBooks) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, student.getStudentId());
+            statement.setString(2, student.getName());
+            statement.setString(3, student.getUsername());
+            statement.setString(4, student.getPassword());
+            statement.setInt(5, 0);
+            statement.setInt(6, 0);
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return false;
+        }
+        
+    }
+
+    public Student getStudent(int studentId) {
+        String query = "SELECT * FROM student WHERE studentId = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String username = resultSet.getString("username");
+                String password = resultSet.getString("password");
+                int accountBalance = resultSet.getInt("accountBalance");
+                int numIssuedBooks = resultSet.getInt("numIssuedBooks");
+
+                return new Student(studentId, name, username, password, accountBalance, numIssuedBooks);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return null;
+        }
+        return null;
+    }
+
+    public boolean updateStudent(Student student) {
+        String query = "UPDATE student SET name = ?, accountBalance = ?, numIssuedBooks = ? WHERE studentId = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, student.getName());
+            statement.setDouble(2, student.getAccountBalance());
+            statement.setInt(3, student.getNumIssuedBooks());
+            statement.setInt(4, student.getStudentId());
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteStudent(int studentId) {
+        String query = "DELETE FROM student WHERE studentId = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return false;
+        }
+    }
+    
+
+    public List<Transaction> getIssuedBooksForStudent(int studentId) {
+        List<Transaction> transactions = new ArrayList<>();
+        String query = "SELECT t.transaction_id, t.book_id, t.issue_date, t.return_date, t.fine, t.rating " +
+                       "FROM transaction t " +
+                       "WHERE t.student_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int transactionId = resultSet.getInt("transaction_id");
+                int bookId = resultSet.getInt("book_id");
+                java.sql.Date issueDate = resultSet.getDate("issue_date");
+                java.sql.Date returnDate = resultSet.getDate("return_date");
+                double fine = resultSet.getDouble("fine");
+                int rating = resultSet.getInt("rating");
+
+                Transaction transaction = new Transaction(transactionId, studentId, bookId, issueDate, returnDate, fine, rating);
+                transactions.add(transaction);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+        }
+        return transactions;
+    }
+}
