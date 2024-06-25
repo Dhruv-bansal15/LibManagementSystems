@@ -25,10 +25,10 @@ public class LibraryManagementSystem {
     private static StudentService studentService = new StudentService();
     private static AdminService adminService = new AdminService();
     private static LibrarianService librarianService = new LibrarianService();
-    private LibrarianDAO librarianDAO;
-    private AdminDAO adminDAO;
-    private StudentDAO studentDAO;
-    private BookDAO bookDAO;
+    private static LibrarianDAO librarianDAO;
+    private static AdminDAO adminDAO;
+    private static StudentDAO studentDAO;
+    private static BookDAO bookDAO;
 
     public static void main(String[] args) {
         try {
@@ -54,9 +54,9 @@ public class LibraryManagementSystem {
                 case 2:
                     librarianLogin();
                     break;
-                case 3:
-                    studentLogin();
-                    break;
+                // case 3:
+                //     studentLogin();
+                //     break;
                 case 0:
                     System.out.println("Exiting...");
                     return;
@@ -102,19 +102,19 @@ public class LibraryManagementSystem {
         }
     }
 
-    private static void studentLogin() {
-        // Assuming student login mechanism (e.g., name as username)
-        System.out.println("Enter student name: ");
-        String studentName = scanner.nextLine();
+    // private static void studentLogin() {
+    //     // Assuming student login mechanism (e.g., name as username)
+    //     System.out.println("Enter student name: ");
+    //     String studentName = scanner.nextLine();
 
-        Student student = studentService.getStudentByName(studentName);
-        if (student != null) {
-            System.out.println("Student logged in successfully.");
-            studentMenu(student);
-        } else {
-            System.out.println("Student not found.");
-        }
-    }
+    //     Student student = studentService.getStudentByName(studentName);
+    //     if (student != null) {
+    //         System.out.println("Student logged in successfully.");
+    //         studentMenu(student);
+    //     } else {
+    //         System.out.println("Student not found.");
+    //     }
+    // }
 
     private static void adminMenu() {
         while (true) {
@@ -168,9 +168,9 @@ public class LibraryManagementSystem {
                 case 2:
                     deleteStudent();
                     break;
-                case 3:
-                    updateStudent();
-                    break;
+                // case 3:
+                //     updateStudent();
+                //     break;
                 case 4:
                     addBook();
                     break;
@@ -213,9 +213,9 @@ public class LibraryManagementSystem {
                 case 2:
                     viewReservedBooks(student);
                     break;
-                case 3:
-                    viewAccountBalance(student);
-                    break;
+                // case 3:
+                //     viewAccountBalance(student);
+                //     break;
                 case 0:
                     System.out.println("Logged out.");
                     return;
@@ -239,12 +239,12 @@ public class LibraryManagementSystem {
         Librarian temp = new Librarian(librarianId, username, password, name, sectionId);
 
         if (librarianDAO.addLibrarian(temp)) {
-                System.out.println("librarian added successfully");
-                adminMenu();
-        } else{
-                System.out.println("error");
+            System.out.println("librarian added successfully");
+            adminMenu();
+        } else {
+            System.out.println("error");
         }
-        
+
     }
 
     private static void deleteLibrarian() {
@@ -252,12 +252,12 @@ public class LibraryManagementSystem {
         int librarianId = Integer.parseInt(scanner.nextLine());
         boolean ans = librarianDAO.deleteLibrarian(librarianId);
         if (ans) {
-                System.out.println("librarian deleted successfully");
-                adminMenu();
-        } else{
-                System.out.println("error");
+            System.out.println("librarian deleted successfully");
+            adminMenu();
+        } else {
+            System.out.println("error");
         }
-        
+
     }
 
     private static void addNewAdmin() {
@@ -271,10 +271,10 @@ public class LibraryManagementSystem {
         String name = scanner.nextLine();
         Admin temp = new Admin(librarianId, username, password, name);
 
-        if(adminDAO.addAdmin(temp)){
-                System.out.println("admin added successfully");
-                adminMenu();
-        }else{
+        if (adminDAO.addAdmin(temp)) {
+            System.out.println("admin added successfully");
+            adminMenu();
+        } else {
             System.out.println("error");
         }
     }
@@ -290,10 +290,10 @@ public class LibraryManagementSystem {
         String name = scanner.nextLine();
 
         Student temp = new Student(studentId, name, username, password);
-        if(studentDAO.addStudent(temp)){
+        if (studentDAO.addStudent(temp)) {
             System.out.println("student added successfully");
             librarianMenu();
-        }else{
+        } else {
             System.out.println("error");
         }
 
@@ -304,34 +304,34 @@ public class LibraryManagementSystem {
         System.out.println("Enter Student Id: ");
         int studentId = Integer.parseInt(scanner.nextLine());
 
-        if(studentDAO.deleteStudent(studentId)){
+        if (studentDAO.deleteStudent(studentId)) {
             System.out.println("student deleted successfully");
             librarianMenu();
-        }else{
+        } else {
             System.out.println("error");
         }
         // Implementation here
     }
 
-    private static void updateStudent() {
-        System.out.println("Enter Student Id: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter student updated name: ");
-        String name = scanner.nextLine();
-        System.out.println("Enter student updated numIssuedBooks: ");
-        String numIssuedBooks = scanner.nextLine();
-        System.out.println("Enter student updated accountBalance: ");
-        String accountBalance = scanner.nextLine();
+    // private static void updateStudent() {
+    //     System.out.println("Enter Student Id: ");
+    //     int studentId = Integer.parseInt(scanner.nextLine());
+    //     System.out.println("Enter student updated name: ");
+    //     String name = scanner.nextLine();
+    //     System.out.println("Enter student updated numIssuedBooks: ");
+    //     String numIssuedBooks = scanner.nextLine();
+    //     System.out.println("Enter student updated accountBalance: ");
+    //     String accountBalance = scanner.nextLine();
 
-        Student temp = new Student(studentId, name, accountBalance, numIssuedBooks);
-        if(studentDAO.updateStudent(studentId)){
-            System.out.println("student deleted successfully");
-            librarianMenu();
-        }else{
-            System.out.println("error");
-        }
-        
-    }
+    //     Student temp = new Student(studentId, name, accountBalance, numIssuedBooks);
+    //     if (studentDAO.updateStudent(studentId)) {
+    //         System.out.println("student deleted successfully");
+    //         librarianMenu();
+    //     } else {
+    //         System.out.println("error");
+    //     }
+
+    // }
 
     private static void addBook() {
         System.out.println("Enter Book Id: ");
@@ -346,10 +346,10 @@ public class LibraryManagementSystem {
         int sectionId = Integer.parseInt(scanner.nextLine());
 
         Book temp = new Book(bookId, title, author, availableCopies, sectionId);
-        if(bookDAO.addBook(temp)){
+        if (bookDAO.addBook(temp)) {
             System.out.println("book added successfully");
             librarianMenu();
-        }else{
+        } else {
             System.out.println("error");
         }
 
@@ -360,10 +360,10 @@ public class LibraryManagementSystem {
         System.out.println("Enter Book Id: ");
         int bookId = Integer.parseInt(scanner.nextLine());
 
-        if(bookDAO.deleteBook(bookId)){
+        if (bookDAO.deleteBook(bookId)) {
             System.out.println("book deleted successfully");
             librarianMenu();
-        }else{
+        } else {
             System.out.println("error");
         }
         // Implementation here
@@ -380,10 +380,10 @@ public class LibraryManagementSystem {
         int numIssues = Integer.parseInt(scanner.nextLine());
 
         Book temp = new Book(bookId, availableCopies, rating, numIssues);
-        if(bookDAO.updateBook(temp)){
+        if (bookDAO.updateBook(temp)) {
             System.out.println("book updated successfully");
             librarianMenu();
-        }else{
+        } else {
             System.out.println("error");
         }
         // Implementation here
@@ -410,9 +410,9 @@ public class LibraryManagementSystem {
         // Implementation here
     }
 
-    private static void viewAccountBalance(Student student) {
-    System.out.println("Account balance for student: " + student.getName() + " is
-    " + student.getAccountBalance());
-    // Implementation here
-    }
+    // private static void viewAccountBalance(Student student) {
+    // System.out.println("Account balance for student: " + student.getName() + " is
+    // " + student.getAccountBalance());
+    // // Implementation here
+    // }
 }

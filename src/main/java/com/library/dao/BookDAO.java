@@ -19,7 +19,7 @@ public class BookDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, book.getTitle());
             stmt.setString(2, book.getAuthor());
-            stmt.setString(3, book.getSection());
+            stmt.setInt(3, book.getSectionId());
             stmt.setInt(4, book.getAvailableCopies());
             stmt.setDouble(5, book.getRating());
             stmt.setInt(6, book.getNumIssues());
@@ -33,53 +33,53 @@ public class BookDAO {
     }
 
     // Method to fetch a book by bookId from the database
-    public Book getBookById(int bookId) {
-        String query = "SELECT * FROM books WHERE book_id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, bookId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String title = rs.getString("title");
-                    String author = rs.getString("author");
-                    String section = rs.getString("section");
-                    int availableCopies = rs.getInt("available_copies");
-                    double rating = rs.getDouble("rating");
-                    int numIssues = rs.getInt("num_issues");
+    // public Book getBookById(int bookId) {
+    //     String query = "SELECT * FROM books WHERE book_id = ?";
+    //     try (Connection conn = DatabaseConnection.getConnection();
+    //          PreparedStatement stmt = conn.prepareStatement(query)) {
+    //         stmt.setInt(1, bookId);
+    //         try (ResultSet rs = stmt.executeQuery()) {
+    //             if (rs.next()) {
+    //                 String title = rs.getString("title");
+    //                 String author = rs.getString("author");
+    //                 String section = rs.getString("section");
+    //                 int availableCopies = rs.getInt("available_copies");
+    //                 double rating = rs.getDouble("rating");
+    //                 int numIssues = rs.getInt("num_issues");
 
-                    return new Book(bookId, title, author, section, availableCopies, rating, numIssues);
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
+    //                 return new Book(bookId, title, author, section, availableCopies, rating, numIssues);
+    //             }
+    //         }
+    //     } catch (SQLException ex) {
+    //         ex.printStackTrace();
+    //     }
+    //     return null;
+    // }
 
     // Method to fetch all books from the database
-    public List<Book> getAllBooks() {
-        List<Book> books = new ArrayList<>();
-        String query = "SELECT * FROM books";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                int bookId = rs.getInt("book_id");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-                String section = rs.getString("section");
-                int availableCopies = rs.getInt("available_copies");
-                double rating = rs.getDouble("rating");
-                int numIssues = rs.getInt("num_issues");
+    // public List<Book> getAllBooks() {
+    //     List<Book> books = new ArrayList<>();
+    //     String query = "SELECT * FROM books";
+    //     try (Connection conn = DatabaseConnection.getConnection();
+    //          PreparedStatement stmt = conn.prepareStatement(query);
+    //          ResultSet rs = stmt.executeQuery()) {
+    //         while (rs.next()) {
+    //             int bookId = rs.getInt("book_id");
+    //             String title = rs.getString("title");
+    //             String author = rs.getString("author");
+    //             String section = rs.getString("section");
+    //             int availableCopies = rs.getInt("available_copies");
+    //             double rating = rs.getDouble("rating");
+    //             int numIssues = rs.getInt("num_issues");
 
-                Book book = new Book(bookId, title, author, section, availableCopies, rating, numIssues);
-                books.add(book);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error occured: " + ex.getMessage());
-        }
-        return books;
-    }
+    //             Book book = new Book(bookId, title, author, section, availableCopies, rating, numIssues);
+    //             books.add(book);
+    //         }
+    //     } catch (SQLException ex) {
+    //         System.out.println("Error occured: " + ex.getMessage());
+    //     }
+    //     return books;
+    // }
 
     // Method to update an existing book in the database
     public boolean updateBook(Book book) {
