@@ -25,10 +25,10 @@ public class LibraryManagementSystem {
     private static StudentService studentService = new StudentService();
     private static AdminService adminService = new AdminService();
     private static LibrarianService librarianService = new LibrarianService();
-    private static LibrarianDAO librarianDAO;
-    private static AdminDAO adminDAO;
-    private static StudentDAO studentDAO;
-    private static BookDAO bookDAO;
+    private static LibrarianDAO librarianDAO = new LibrarianDAO();
+    private static AdminDAO adminDAO = new AdminDAO();
+    private static StudentDAO studentDAO = new StudentDAO();
+    private static BookDAO bookDAO = new BookDAO();
 
     public static void main(String[] args) {
         try {
@@ -139,6 +139,7 @@ public class LibraryManagementSystem {
                 case 0:
                     authService.logout();
                     System.out.println("Logged out.");
+                    LibraryManagementSystem.main(null);
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -345,7 +346,7 @@ public class LibraryManagementSystem {
         System.out.println("Enter Section Id: ");
         int sectionId = Integer.parseInt(scanner.nextLine());
 
-        Book temp = new Book(bookId, title, author, availableCopies, sectionId);
+        Book temp = new Book(bookId, title, author ,sectionId, availableCopies);
         if (bookDAO.addBook(temp)) {
             System.out.println("book added successfully");
             librarianMenu();

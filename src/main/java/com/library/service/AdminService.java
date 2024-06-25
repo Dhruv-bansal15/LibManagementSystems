@@ -33,32 +33,32 @@ public class AdminService {
     }
 
     // Method to update an existing admin
-    public boolean updateAdmin(Admin admin) {
-        Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
-        if (loggedInAdmin == null) {
-            return false; // Only logged-in admin can update admins
-        }
+    // public boolean updateAdmin(Admin admin) {
+    //     Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
+    //     if (loggedInAdmin == null) {
+    //         return false; // Only logged-in admin can update admins
+    //     }
 
-        return adminDAO.updateAdmin(admin);
-    }
+    //     return adminDAO.updateAdmin(admin);
+    // }
 
-    // Method to delete an admin by adminId
-    public boolean deleteAdmin(int adminId) {
-        Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
-        if (loggedInAdmin == null) {
-            return false; // Only logged-in admin can delete admins
-        }
+    // // Method to delete an admin by adminId
+    // public boolean deleteAdmin(int adminId) {
+    //     Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
+    //     if (loggedInAdmin == null) {
+    //         return false; // Only logged-in admin can delete admins
+    //     }
 
-        return adminDAO.deleteAdmin(adminId);
-    }
+    //     return adminDAO.deleteAdmin(adminId);
+    // }
 
     // Method to verify a librarian by assigning them to a section
-    public boolean verifyLibrarian(Librarian librarian, String sectionName) {
-        Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
-        if (loggedInAdmin == null) {
-            return false; // Only logged-in admin can verify librarians
-        }
+    // public boolean verifyLibrarian(Librarian librarian, String sectionName) {
+    //     Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
+    //     if (loggedInAdmin == null) {
+    //         return false; // Only logged-in admin can verify librarians
+    //     }
 
-        return adminDAO.assignLibrarianSection(librarian, sectionName);
-    }
+    //     return adminDAO.assignLibrarianSection(librarian, sectionName);
+    // }
 }
