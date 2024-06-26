@@ -108,13 +108,9 @@ public class LibraryManagementSystem {
         // if (true) {
         if (authService.loginStudent(username, password)) {
             Student loggedInStudent = AuthenticationService.getLoggedInStudent();
-            if (loggedInStudent != null) {
-            // if (true) {
-                System.out.println("Student logged in successfully.");
-                studentMenu(loggedInStudent);
-            } else {
-                System.out.println("Invalid Student credentials.");
-            }
+            studentMenu(loggedInStudent);
+        } else {
+            System.out.println("Invalid Student credentials.");
         }
     }
 
