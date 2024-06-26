@@ -8,9 +8,9 @@ import com.library.model.Librarian;
 import com.library.model.Student;
 
 public class AuthenticationService {
-    private static Admin loggedInAdmin;
-    private static Librarian loggedInLibrarian;
-    private static Student loggedInStudent;
+    private static Admin loggedInAdmin = null;
+    private static Librarian loggedInLibrarian = null;
+    private static Student loggedInStudent = null;
     private AdminDAO adminDAO;
     private LibrarianDAO librarianDAO;
     private StudentDAO studentDAO;
@@ -41,15 +41,14 @@ public class AuthenticationService {
         return false;
     }
 
-    // Student login (assuming login by student name)
-    // public boolean loginStudent(String name) {
-    //     Student student = studentDAO.getStudentByName(name);
-    //     if (student != null && student.isVerified()) {
-    //         loggedInStudent = student;
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    public boolean loginStudent(String username, String password) {
+        Student student = studentDAO.getStudentByUsernameAndPassword(username, password);
+        if (student != null) {
+            loggedInStudent = student;
+            return true;
+        }
+        return false;
+    }
 
     // Logout
     public void logout() {

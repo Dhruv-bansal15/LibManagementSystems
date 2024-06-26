@@ -31,7 +31,7 @@ public class LibrarianDAO {
                 success = true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
         } finally {
             DatabaseConnection.closeResources(conn, stmt);
         }
@@ -62,7 +62,7 @@ public class LibrarianDAO {
                 librarian = new Librarian(librarianId, username, password, name, sectionId);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
         } finally {
             DatabaseConnection.closeResources(conn, stmt, rs);
         }
@@ -93,7 +93,7 @@ public class LibrarianDAO {
                 librarian = new Librarian(librarianId, username, password, name, sectionId);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
         } finally {
             DatabaseConnection.closeResources(conn, stmt, rs);
         }
@@ -149,7 +149,7 @@ public class LibrarianDAO {
                 success = true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Error occured: " + ex.getMessage());
         } finally {
             DatabaseConnection.closeResources(conn, stmt);
         }

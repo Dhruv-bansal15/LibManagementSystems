@@ -64,7 +64,7 @@ public class Student {
         this.password = password;
     }
 
-    public double getAccountBalance() {
+    public int getAccountBalance() {
         return accountBalance;
     }
 

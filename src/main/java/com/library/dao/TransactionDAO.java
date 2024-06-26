@@ -125,8 +125,9 @@ public class TransactionDAO {
                         resultSet.getInt("bookId"),
                         resultSet.getDate("issueDate"),
                         resultSet.getDate("returnDate"),
-                        resultSet.getDouble("fine"),
-                        resultSet.getInt("rating"));
+                        resultSet.getInt("fine"),
+                        resultSet.getInt("rating")
+                );
                 transactions.add(transaction);
             }
         } catch (SQLException ex) {

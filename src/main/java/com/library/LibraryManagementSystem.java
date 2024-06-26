@@ -1,5 +1,6 @@
 package com.library;
 
+import java.util.List;
 import java.util.Properties;
 
 import com.library.service.AuthenticationService;
@@ -17,6 +18,7 @@ import com.library.dao.LibrarianDAO;
 import com.library.dao.StudentDAO;
 import com.library.dao.TransactionDAO;
 import com.library.dao.BookDAO;
+import com.library.dao.TransactionDAO;
 import java.util.Date;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
@@ -28,9 +30,9 @@ import java.sql.*;
 public class LibraryManagementSystem {
     private static Scanner scanner = new Scanner(System.in);
     private static AuthenticationService authService = new AuthenticationService();
-    private static StudentService studentService = new StudentService();
-    private static AdminService adminService = new AdminService();
-    private static LibrarianService librarianService = new LibrarianService();
+    // private static StudentService studentService = new StudentService();
+    // private static AdminService adminService = new AdminService();
+    // private static LibrarianService librarianService = new LibrarianService();
     private static LibrarianDAO librarianDAO = new LibrarianDAO();
     private static AdminDAO adminDAO = new AdminDAO();
     private static StudentDAO studentDAO = new StudentDAO();
@@ -39,10 +41,7 @@ public class LibraryManagementSystem {
 
     public static void main(String[] args) {
         try {
-
             Connection con = DatabaseConnection.getConnection();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from emp");
             con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -56,14 +55,13 @@ public class LibraryManagementSystem {
             switch (role) {
                 case 1:
                     adminLogin();
-                    System.out.println("admin login");
                     break;
                 case 2:
                     librarianLogin();
                     break;
-                // case 3:
-                //     studentLogin();
-                //     break;
+                case 3:
+                    studentLogin();
+                    break;
                 case 0:
                     System.out.println("Exiting...");
                     return;
@@ -109,19 +107,24 @@ public class LibraryManagementSystem {
         }
     }
 
-    // private static void studentLogin() {
-    //     // Assuming student login mechanism (e.g., name as username)
-    //     System.out.println("Enter student name: ");
-    //     String studentName = scanner.nextLine();
+    private static void studentLogin() {
+        System.out.println("Enter student username: ");
+        String username = scanner.nextLine();
+        System.out.println("Enter student password: ");
+        String password = scanner.nextLine();
 
-    //     Student student = studentService.getStudentByName(studentName);
-    //     if (student != null) {
-    //         System.out.println("Student logged in successfully.");
-    //         studentMenu(student);
-    //     } else {
-    //         System.out.println("Student not found.");
-    //     }
-    // }
+        // if (true) {
+        if (authService.loginStudent(username, password)) {
+            Student loggedInStudent = AuthenticationService.getLoggedInStudent();
+            if (loggedInStudent != null) {
+            // if (true) {
+                System.out.println("Student logged in successfully.");
+                studentMenu(loggedInStudent);
+            } else {
+                System.out.println("Invalid Student credentials.");
+            }
+        }
+    }
 
     private static void adminMenu() {
         while (true) {
@@ -208,8 +211,8 @@ public class LibraryManagementSystem {
         while (true) {
             System.out.println("Student Menu: ");
             System.out.println("1- View Issued Books");
-            System.out.println("2- View Reserved Books");
-            System.out.println("3- View Account Balance");
+            System.out.println("2- View Account Balance");
+            System.out.println("3- Add Account Balance");
             System.out.println("0- Logout");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -218,12 +221,12 @@ public class LibraryManagementSystem {
                 case 1:
                     viewIssuedBooks(student);
                     break;
-                // case 2:
-                //     viewReservedBooks(student);
-                //     break;
-                // case 3:
-                //     viewAccountBalance(student);
-                //     break;
+                case 2:
+                    viewAccountBalance(student);
+                    break;
+                case 3:
+                    addAccountBalance(student);
+                    break;
                 case 0:
                     System.out.println("Logged out.");
                     return;
@@ -451,13 +454,32 @@ public class LibraryManagementSystem {
     }
 
     private static void viewIssuedBooks(Student student) {
+        List<Transaction> transactions = transactionDAO.getTransactionsByStudentId(student.getStudentId());
+
         System.out.println("Viewing issued books for student: " + student.getName());
-        // Implementation here
+
+        if (transactions.isEmpty()) {
+            System.out.println("No books issued to this student.");
+        } else {
+            for (Transaction transaction : transactions) {
+                System.out.println(transaction);
+            }
+        }
     }
 
-    // private static void viewAccountBalance(Student student) {
-    // System.out.println("Account balance for student: " + student.getName() + " is
-    // " + student.getAccountBalance());
-    // // Implementation here
+    // private static void viewReservedBooks(Student student) {
     // }
+
+    private static void viewAccountBalance(Student student) {
+        System.out.println("Account balance for student: " + student.getName() + " is " + student.getAccountBalance());
+        System.out.println();
+    }
+
+    private static void addAccountBalance(Student student) {
+        System.out.println("Add the amount to add in your account: ");
+        int amount = scanner.nextInt();
+
+        student.setAccountBalance(student.getAccountBalance() + amount);
+        viewAccountBalance(student);
+    }
 }
