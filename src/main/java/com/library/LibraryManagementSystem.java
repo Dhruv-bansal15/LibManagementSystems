@@ -72,13 +72,10 @@ public class LibraryManagementSystem {
         String password = scanner.nextLine();
 
         if (authService.loginAdmin(username, password)) {
-            Admin loggedInAdmin = AuthenticationService.getLoggedInAdmin();
-            if (loggedInAdmin != null) {
-                System.out.println("Admin logged in successfully.");
-                adminMenu();
-            } else {
-                System.out.println("Invalid admin credentials.");
-            }
+            System.out.println("Admin logged in successfully.");
+            adminMenu();
+        } else {
+            System.out.println("Invalid admin credentials.");
         }
     }
 
@@ -89,13 +86,10 @@ public class LibraryManagementSystem {
         String password = scanner.nextLine();
 
         if (authService.loginLibrarian(username, password)) {
-            Librarian loggedInLibrarian = AuthenticationService.getLoggedInLibrarian();
-            if (loggedInLibrarian != null) {
-                System.out.println("Librarian logged in successfully.");
-                librarianMenu();
-            } else {
-                System.out.println("Invalid librarian credentials.");
-            }
+            System.out.println("Librarian logged in successfully.");
+            librarianMenu();
+        } else {
+            System.out.println("Invalid librarian credentials.");
         }
     }
 
@@ -108,6 +102,7 @@ public class LibraryManagementSystem {
         // if (true) {
         if (authService.loginStudent(username, password)) {
             Student loggedInStudent = AuthenticationService.getLoggedInStudent();
+            System.out.println("Student login successfully");
             studentMenu(loggedInStudent);
         } else {
             System.out.println("Invalid Student credentials.");
@@ -311,22 +306,22 @@ public class LibraryManagementSystem {
     }
 
     // private static void updateStudent() {
-    //     System.out.println("Enter Student Id: ");
-    //     int studentId = Integer.parseInt(scanner.nextLine());
-    //     System.out.println("Enter student updated name: ");
-    //     String name = scanner.nextLine();
-    //     System.out.println("Enter student updated numIssuedBooks: ");
-    //     String numIssuedBooks = scanner.nextLine();
-    //     System.out.println("Enter student updated accountBalance: ");
-    //     String accountBalance = scanner.nextLine();
+    // System.out.println("Enter Student Id: ");
+    // int studentId = Integer.parseInt(scanner.nextLine());
+    // System.out.println("Enter student updated name: ");
+    // String name = scanner.nextLine();
+    // System.out.println("Enter student updated numIssuedBooks: ");
+    // String numIssuedBooks = scanner.nextLine();
+    // System.out.println("Enter student updated accountBalance: ");
+    // String accountBalance = scanner.nextLine();
 
-    //     Student temp = new Student(studentId, name, accountBalance, numIssuedBooks);
-    //     if (studentDAO.updateStudent(studentId)) {
-    //         System.out.println("student deleted successfully");
-    //         librarianMenu();
-    //     } else {
-    //         System.out.println("error");
-    //     }
+    // Student temp = new Student(studentId, name, accountBalance, numIssuedBooks);
+    // if (studentDAO.updateStudent(studentId)) {
+    // System.out.println("student deleted successfully");
+    // librarianMenu();
+    // } else {
+    // System.out.println("error");
+    // }
 
     // }
 
@@ -342,7 +337,7 @@ public class LibraryManagementSystem {
         System.out.println("Enter Section Id: ");
         int sectionId = Integer.parseInt(scanner.nextLine());
 
-        Book temp = new Book(bookId, title, author ,sectionId, availableCopies);
+        Book temp = new Book(bookId, title, author, sectionId, availableCopies);
         if (bookDAO.addBook(temp)) {
             System.out.println("book added successfully");
             librarianMenu();
@@ -383,7 +378,7 @@ public class LibraryManagementSystem {
         } else {
             System.out.println("book credentials are wrong");
         }
-        
+
     }
 
     private static void issueBook() {
@@ -410,7 +405,7 @@ public class LibraryManagementSystem {
         } else {
             System.out.println("transaction cannot be added, some error occured");
         }
-        
+
     }
 
     private static void returnBook() {
@@ -436,7 +431,7 @@ public class LibraryManagementSystem {
         } else {
             System.out.println("book is not yet issued");
         }
-        
+
     }
 
     private static void viewIssuedBooks(Student student) {
