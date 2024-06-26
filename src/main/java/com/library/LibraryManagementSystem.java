@@ -8,6 +8,7 @@ import com.library.model.Book;
 import com.library.model.Librarian;
 import com.library.model.Student;
 import com.library.model.Transaction;
+import com.library.model.studentTransaction;
 import com.library.util.DatabaseConnection;
 import com.library.dao.AdminDAO;
 import com.library.dao.LibrarianDAO;
@@ -432,15 +433,15 @@ public class LibraryManagementSystem {
     }
 
     private static void viewIssuedBooks(Student student) {
-        List<Transaction> transactions = transactionDAO.getTransactionsByStudentId(student.getStudentId());
+        List<studentTransaction> transactions = transactionDAO.getTransactionsByStudentId(student.getStudentId());
 
         System.out.println("Viewing issued books for student: " + student.getName());
 
         if (transactions.isEmpty()) {
             System.out.println("No books issued to this student.");
         } else {
-            for (Transaction transaction : transactions) {
-                System.out.println(transaction);
+            for (studentTransaction t : transactions) {
+                System.out.println("TransactionID - " + t.transactionId + ", Book Title - " + t.title + ", Issue Date - " + t.issueDate + ", Return Date - " + t.returnDate + ", Fine - " + t.fine + ", Rating - " + t.rating);
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.library.dao;
 
 import com.library.model.Transaction;
+import com.library.model.studentTransaction;
 import com.library.util.DatabaseConnection;
 
 import java.sql.*;
@@ -119,28 +120,27 @@ public class TransactionDAO {
         }
     }
 
-    public List<Transaction> getTransactionsByStudentId(int studentId) {
-        List<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT * FROM transaction WHERE studentId = ?";
+    public List<studentTransaction> getTransactionsByStudentId(int studentId) {
+        List<studentTransaction> studentTransactions = new ArrayList<>();
+        String query = "SELECT t.transactionId, b.title, t.issueDate, t.returnDate, t.fine, t.rating FROM transaction t INNER JOIN book b on t.BOOKID = b.BOOKID where t.STUDENTID = ?";
         try (Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, studentId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Transaction transaction = new Transaction(
-                        resultSet.getInt("transactionId"),
-                        resultSet.getInt("studentId"),
-                        resultSet.getInt("bookId"),
-                        resultSet.getDate("issueDate"),
-                        resultSet.getDate("returnDate"),
-                        resultSet.getInt("fine"),
-                        resultSet.getInt("rating")
+                studentTransaction studentTransaction = new studentTransaction(
+                    resultSet.getInt("transactionId"),
+                    resultSet.getString("title"),
+                    resultSet.getDate("issueDate"),
+                    resultSet.getDate("returnDate"),
+                    resultSet.getInt("fine"),
+                    resultSet.getInt("rating")
                 );
-                transactions.add(transaction);
+                studentTransactions.add(studentTransaction);
             }
         } catch (SQLException ex) {
             System.out.println("Error occured: " + ex.getMessage());
         }
-        return transactions;
+        return studentTransactions;
     }
 }
