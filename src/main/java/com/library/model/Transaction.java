@@ -12,7 +12,8 @@ public class Transaction {
     private int rating;
 
     // Constructor for creating a new Transaction instance
-    public Transaction(int studentId, int bookId, Date issueDate) {
+    public Transaction(int transactionId, int studentId, int bookId, Date issueDate) {
+        this.transactionId = transactionId;
         this.studentId = studentId;
         this.bookId = bookId;
         this.issueDate = issueDate;
