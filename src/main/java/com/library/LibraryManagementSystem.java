@@ -10,11 +10,17 @@ import com.library.model.Admin;
 import com.library.model.Book;
 import com.library.model.Librarian;
 import com.library.model.Student;
+import com.library.model.Transaction;
 import com.library.util.DatabaseConnection;
 import com.library.dao.AdminDAO;
 import com.library.dao.LibrarianDAO;
 import com.library.dao.StudentDAO;
+import com.library.dao.TransactionDAO;
 import com.library.dao.BookDAO;
+import java.util.Date;
+import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 import java.util.Scanner;
 import java.sql.*;
@@ -29,6 +35,7 @@ public class LibraryManagementSystem {
     private static AdminDAO adminDAO = new AdminDAO();
     private static StudentDAO studentDAO = new StudentDAO();
     private static BookDAO bookDAO = new BookDAO();
+    private static TransactionDAO transactionDAO = new TransactionDAO();
 
     public static void main(String[] args) {
         try {
@@ -211,9 +218,9 @@ public class LibraryManagementSystem {
                 case 1:
                     viewIssuedBooks(student);
                     break;
-                case 2:
-                    viewReservedBooks(student);
-                    break;
+                // case 2:
+                //     viewReservedBooks(student);
+                //     break;
                 // case 3:
                 //     viewAccountBalance(student);
                 //     break;
@@ -391,23 +398,60 @@ public class LibraryManagementSystem {
     }
 
     private static void issueBook() {
-        System.out.println("Issuing books...");
-        // Implementation here
+        System.out.println("Enter Transaction Id: ");
+        int transactionId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter StudentId: ");
+        int studentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter BookId: ");
+        int bookId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter IssueDate (YYYY-MM-DD): ");
+        String dateString = scanner.nextLine();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date issueDate = null;
+        try {
+            issueDate = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
+        }
+
+        Transaction temp = new Transaction(transactionId, studentId, bookId, issueDate);
+        if (transactionDAO.addTransaction(temp)) {
+            System.out.println("transaction added successfully");
+            librarianMenu();
+        } else {
+            System.out.println("error");
+        }
+        
     }
 
     private static void returnBook() {
-        System.out.println("Returning books...");
-        // Implementation here
+        System.out.println("Enter Book Id: ");
+        int bookId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter StudentId: ");
+        int studentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter rating: ");
+        int rating = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter returnDate (YYYY-MM-DD): ");
+        String dateString = scanner.nextLine();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date returnDate = null;
+        try {
+            returnDate = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
+        }
+
+        if (transactionDAO.returnBook(studentId, bookId, returnDate, rating)) {
+            System.out.println("transaction updated successfully");
+            librarianMenu();
+        } else {
+            System.out.println("error");
+        }
+        
     }
 
     private static void viewIssuedBooks(Student student) {
         System.out.println("Viewing issued books for student: " + student.getName());
-        // Implementation here
-    }
-
-    private static void viewReservedBooks(Student student) {
-        System.out.println("Viewing reserved books for student: " +
-                student.getName());
         // Implementation here
     }
 
