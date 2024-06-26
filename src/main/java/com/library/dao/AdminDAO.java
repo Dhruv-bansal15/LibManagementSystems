@@ -1,7 +1,6 @@
 package com.library.dao;
 
 import com.library.model.Admin;
-import com.library.model.Librarian;
 import com.library.util.DatabaseConnection;
 
 import java.sql.Connection;

@@ -31,8 +31,8 @@ public class TransactionDAO {
 
 
             int tempAccountBalance = studentDAO.getAccountBalanceById(transaction.getStudentId());
-
-            if(tempAccountBalance < 0){
+            int tempNumIssuedBooks = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
+            if(tempAccountBalance < 0 || tempNumIssuedBooks >= 5){
                 return false;
             }
             
