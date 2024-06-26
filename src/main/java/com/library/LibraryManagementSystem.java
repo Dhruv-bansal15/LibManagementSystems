@@ -17,14 +17,13 @@ import com.library.dao.BookDAO;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+
 import java.sql.*;
 
 public class LibraryManagementSystem {
     private static Scanner scanner = new Scanner(System.in);
     private static AuthenticationService authService = new AuthenticationService();
-    // private static StudentService studentService = new StudentService();
-    // private static AdminService adminService = new AdminService();
-    // private static LibrarianService librarianService = new LibrarianService();
+    
     private static LibrarianDAO librarianDAO = new LibrarianDAO();
     private static AdminDAO adminDAO = new AdminDAO();
     private static StudentDAO studentDAO = new StudentDAO();
@@ -61,8 +60,6 @@ public class LibraryManagementSystem {
                     System.out.println("Invalid option, please try again.");
             }
         }
-
-        // cl
     }
 
     private static void adminLogin() {
@@ -450,14 +447,16 @@ public class LibraryManagementSystem {
 
     private static void viewAccountBalance(Student student) {
         System.out.println("Account balance for student: " + student.getName() + " is " + student.getAccountBalance());
-        System.out.println();
     }
 
     private static void addAccountBalance(Student student) {
         System.out.println("Add the amount to add in your account: ");
         int amount = scanner.nextInt();
+        scanner.nextLine();
 
         student.setAccountBalance(student.getAccountBalance() + amount);
+        studentDAO.updateStudent(student);
         viewAccountBalance(student);
+        System.out.println();
     }
 }
