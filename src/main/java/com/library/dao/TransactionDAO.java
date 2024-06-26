@@ -28,6 +28,14 @@ public class TransactionDAO {
             statement.setDate(5, null);
             statement.setInt(6, 0);
             statement.setInt(7, -1);
+
+
+            int tempAccountBalance = studentDAO.getAccountBalanceById(transaction.getStudentId());
+
+            if(tempAccountBalance < 0){
+                return false;
+            }
+            
             int rowsInserted = statement.executeUpdate();
             int ans = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
             
@@ -45,7 +53,7 @@ public class TransactionDAO {
     public boolean returnBook(int studentId, int bookId, java.util.Date returnDate, int rating) {
         String selectQuery = "SELECT issueDate FROM transaction WHERE studentId = ? AND bookId = ?";
         String updateTransactionQuery = "UPDATE transaction SET returnDate = ?, fine = ?, rating = ? WHERE studentId = ? AND bookId = ?";
-        String updateStudentQuery = "UPDATE student SET accountBalance = accountBalance + ? WHERE studentId = ?";
+        String updateStudentQuery = "UPDATE student SET accountBalance = accountBalance - ? WHERE studentId = ?";
         String updateBookRatingQuery = "UPDATE book SET rating = ( rating + ? )/2 WHERE bookId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(selectQuery);

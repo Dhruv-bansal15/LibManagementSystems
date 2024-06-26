@@ -1,12 +1,8 @@
 package com.library;
 
 import java.util.List;
-import java.util.Properties;
 
 import com.library.service.AuthenticationService;
-import com.library.service.AdminService;
-import com.library.service.LibrarianService;
-import com.library.service.StudentService;
 import com.library.model.Admin;
 import com.library.model.Book;
 import com.library.model.Librarian;
@@ -18,13 +14,9 @@ import com.library.dao.LibrarianDAO;
 import com.library.dao.StudentDAO;
 import com.library.dao.TransactionDAO;
 import com.library.dao.BookDAO;
-import com.library.dao.TransactionDAO;
-import java.util.Date;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-
-import java.util.Scanner;
 import java.sql.*;
 
 public class LibraryManagementSystem {
@@ -162,7 +154,7 @@ public class LibraryManagementSystem {
             System.out.println("Librarian Menu: ");
             System.out.println("1- Add Student");
             System.out.println("2- Delete Student");
-            System.out.println("3- Update Student");
+            // System.out.println("3- Update Student");
             System.out.println("4- Add Book");
             System.out.println("5- Delete Book");
             System.out.println("6- Update Book");
@@ -179,9 +171,6 @@ public class LibraryManagementSystem {
                 case 2:
                     deleteStudent();
                     break;
-                // case 3:
-                //     updateStudent();
-                //     break;
                 case 4:
                     addBook();
                     break;
@@ -253,7 +242,7 @@ public class LibraryManagementSystem {
             System.out.println("librarian added successfully");
             adminMenu();
         } else {
-            System.out.println("error");
+            System.out.println("Librarin cannot be added, some error occured");
         }
 
     }
@@ -266,7 +255,7 @@ public class LibraryManagementSystem {
             System.out.println("librarian deleted successfully");
             adminMenu();
         } else {
-            System.out.println("error");
+            System.out.println("invalid librarian id");
         }
 
     }
@@ -286,7 +275,7 @@ public class LibraryManagementSystem {
             System.out.println("admin added successfully");
             adminMenu();
         } else {
-            System.out.println("error");
+            System.out.println("admin cannot be added, some error occured");
         }
     }
 
@@ -305,10 +294,9 @@ public class LibraryManagementSystem {
             System.out.println("student added successfully");
             librarianMenu();
         } else {
-            System.out.println("error");
+            System.out.println("student cannot be added, some error occured");
         }
 
-        // Implementation here
     }
 
     private static void deleteStudent() {
@@ -321,7 +309,6 @@ public class LibraryManagementSystem {
         } else {
             System.out.println("error");
         }
-        // Implementation here
     }
 
     // private static void updateStudent() {
@@ -361,7 +348,7 @@ public class LibraryManagementSystem {
             System.out.println("book added successfully");
             librarianMenu();
         } else {
-            System.out.println("error");
+            System.out.println("book already exists or some other credentials are wrong");
         }
 
         // Implementation here
@@ -375,7 +362,7 @@ public class LibraryManagementSystem {
             System.out.println("book deleted successfully");
             librarianMenu();
         } else {
-            System.out.println("error");
+            System.out.println("invalid bookId");
         }
         // Implementation here
     }
@@ -395,9 +382,9 @@ public class LibraryManagementSystem {
             System.out.println("book updated successfully");
             librarianMenu();
         } else {
-            System.out.println("error");
+            System.out.println("book credentials are wrong");
         }
-        // Implementation here
+        
     }
 
     private static void issueBook() {
@@ -422,7 +409,7 @@ public class LibraryManagementSystem {
             System.out.println("transaction added successfully");
             librarianMenu();
         } else {
-            System.out.println("error");
+            System.out.println("transaction cannot be added, some error occured");
         }
         
     }
@@ -448,7 +435,7 @@ public class LibraryManagementSystem {
             System.out.println("transaction updated successfully");
             librarianMenu();
         } else {
-            System.out.println("error");
+            System.out.println("book is not yet issued");
         }
         
     }
@@ -466,9 +453,6 @@ public class LibraryManagementSystem {
             }
         }
     }
-
-    // private static void viewReservedBooks(Student student) {
-    // }
 
     private static void viewAccountBalance(Student student) {
         System.out.println("Account balance for student: " + student.getName() + " is " + student.getAccountBalance());

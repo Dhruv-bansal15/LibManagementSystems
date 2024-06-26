@@ -74,6 +74,23 @@ public class StudentDAO {
         return -1;
     }
 
+    public int getAccountBalanceById(int studentId) {
+        String query = "SELECT accountBalance FROM student WHERE studentId = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, studentId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int accountBalance = resultSet.getInt("accountBalance");
+                return accountBalance;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return -1;
+        }
+        return -1;
+    }
+
     public boolean updateStudent(Student student) {
         String query = "UPDATE student SET name = ?, accountBalance = ?, numIssuedBooks = ? WHERE studentId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
