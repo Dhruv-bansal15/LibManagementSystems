@@ -189,6 +189,7 @@ public class LibraryManagementSystem {
                 case 0:
                     authService.logout();
                     System.out.println("Logged out.");
+                    LibraryManagementSystem.main(null);
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -217,7 +218,9 @@ public class LibraryManagementSystem {
                     addAccountBalance(student);
                     break;
                 case 0:
+                    authService.logout();
                     System.out.println("Logged out.");
+                    LibraryManagementSystem.main(null);
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
