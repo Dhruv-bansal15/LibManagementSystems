@@ -45,7 +45,7 @@ public class LibraryManagementSystem {
 
         while (true) {
             System.out.println("Please select your role (1-Admin, 2-Librarian, 3-Student, 0-Exit): ");
-            int role = Integer.parseInt(scanner.nextLine());
+            int role = Helper.integerInput(scanner);
             switch (role) {
                 case 1:
                     adminLogin();
@@ -118,7 +118,7 @@ public class LibraryManagementSystem {
             System.out.println("4- View all librarians");
             System.out.println("0- Logout");
 
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = Helper.integerInput(scanner);
 
             switch (choice) {
                 case 1:
@@ -155,7 +155,7 @@ public class LibraryManagementSystem {
             System.out.println("7- Return Books from Students");
             System.out.println("0- Logout");
 
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = Helper.integerInput(scanner);
 
             switch (choice) {
                 case 1:
@@ -197,7 +197,7 @@ public class LibraryManagementSystem {
             System.out.println("3- Add Account Balance");
             System.out.println("0- Logout");
 
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = Helper.integerInput(scanner);
 
             switch (choice) {
                 case 1:
@@ -221,7 +221,7 @@ public class LibraryManagementSystem {
 
     private static void addNewLibrarian() {
         System.out.println("Enter librarian Id: ");
-        int librarianId = Integer.parseInt(scanner.nextLine());
+        int librarianId = Helper.integerInput(scanner);
         System.out.println("Enter librarian username: ");
         String username = scanner.nextLine();
         System.out.println("Enter librarian password: ");
@@ -229,7 +229,7 @@ public class LibraryManagementSystem {
         System.out.println("Enter librarian name: ");
         String name = scanner.nextLine();
         System.out.println("Enter librarian sectionId: ");
-        int sectionId = Integer.parseInt(scanner.nextLine());
+        int sectionId = Helper.integerInput(scanner);
         Librarian temp = new Librarian(librarianId, username, password, name, sectionId);
 
         if (librarianDAO.addLibrarian(temp)) {
@@ -243,7 +243,7 @@ public class LibraryManagementSystem {
 
     private static void deleteLibrarian() {
         System.out.println("Enter librarian Id: ");
-        int librarianId = Integer.parseInt(scanner.nextLine());
+        int librarianId = Helper.integerInput(scanner);
         boolean ans = librarianDAO.deleteLibrarian(librarianId);
         if (ans) {
             System.out.println("librarian deleted successfully");
@@ -256,7 +256,7 @@ public class LibraryManagementSystem {
 
     private static void addNewAdmin() {
         System.out.println("Enter Admin Id: ");
-        int librarianId = Integer.parseInt(scanner.nextLine());
+        int librarianId = Helper.integerInput(scanner);
         System.out.println("Enter admin username: ");
         String username = scanner.nextLine();
         System.out.println("Enter admin password: ");
@@ -275,7 +275,7 @@ public class LibraryManagementSystem {
 
     private static void addStudent() {
         System.out.println("Enter Student Id: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
+        int studentId = Helper.integerInput(scanner);
         System.out.println("Enter student username: ");
         String username = scanner.nextLine();
         System.out.println("Enter student password: ");
@@ -295,7 +295,7 @@ public class LibraryManagementSystem {
 
     private static void deleteStudent() {
         System.out.println("Enter Student Id: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
+        int studentId = Helper.integerInput(scanner);
 
         if (studentDAO.deleteStudent(studentId)) {
             System.out.println("student deleted successfully");
@@ -311,7 +311,7 @@ public class LibraryManagementSystem {
 
     // private static void updateStudent() {
     // System.out.println("Enter Student Id: ");
-    // int studentId = Integer.parseInt(scanner.nextLine());
+    // int studentId = Helper.integerInput(scanner);
     // System.out.println("Enter student updated name: ");
     // String name = scanner.nextLine();
     // System.out.println("Enter student updated numIssuedBooks: ");
@@ -331,15 +331,15 @@ public class LibraryManagementSystem {
 
     private static void addBook() {
         System.out.println("Enter Book Id: ");
-        int bookId = Integer.parseInt(scanner.nextLine());
+        int bookId = Helper.integerInput(scanner);
         System.out.println("Enter book title: ");
         String title = scanner.nextLine();
         System.out.println("Enter book author: ");
         String author = scanner.nextLine();
         System.out.println("Enter num of copies: ");
-        int availableCopies = Integer.parseInt(scanner.nextLine());
+        int availableCopies = Helper.integerInput(scanner);
         System.out.println("Enter Section Id: ");
-        int sectionId = Integer.parseInt(scanner.nextLine());
+        int sectionId = Helper.integerInput(scanner);
 
         Book temp = new Book(bookId, title, author, sectionId, availableCopies);
         if (bookDAO.addBook(temp)) {
@@ -354,7 +354,7 @@ public class LibraryManagementSystem {
 
     private static void deleteBook() {
         System.out.println("Enter Book Id: ");
-        int bookId = Integer.parseInt(scanner.nextLine());
+        int bookId = Helper.integerInput(scanner);
 
         if (bookDAO.deleteBook(bookId)) {
             System.out.println("book deleted successfully");
@@ -367,13 +367,13 @@ public class LibraryManagementSystem {
 
     private static void updateBook() {
         System.out.println("Enter Book Id: ");
-        int bookId = Integer.parseInt(scanner.nextLine());
+        int bookId = Helper.integerInput(scanner);
         System.out.println("Enter num of copies: ");
-        int availableCopies = Integer.parseInt(scanner.nextLine());
+        int availableCopies = Helper.integerInput(scanner);
         System.out.println("Enter rating: ");
-        int rating = Integer.parseInt(scanner.nextLine());
+        int rating = Helper.integerInput(scanner);
         System.out.println("Enter number of issues: ");
-        int numIssues = Integer.parseInt(scanner.nextLine());
+        int numIssues = Helper.integerInput(scanner);
 
         Book temp = new Book(bookId, availableCopies, rating, numIssues);
         if (bookDAO.updateBook(temp)) {
@@ -387,9 +387,9 @@ public class LibraryManagementSystem {
 
     private static void issueBook() {
         System.out.println("Enter StudentId: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
+        int studentId = Helper.integerInput(scanner);
         System.out.println("Enter BookId: ");
-        int bookId = Integer.parseInt(scanner.nextLine());
+        int bookId = Helper.integerInput(scanner);
         System.out.println("Enter IssueDate (YYYY-MM-DD): ");
         String dateString = scanner.nextLine();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -410,11 +410,11 @@ public class LibraryManagementSystem {
 
     private static void returnBook() {
         System.out.println("Enter Book Id: ");
-        int bookId = Integer.parseInt(scanner.nextLine());
+        int bookId = Helper.integerInput(scanner);
         System.out.println("Enter StudentId: ");
-        int studentId = Integer.parseInt(scanner.nextLine());
+        int studentId = Helper.integerInput(scanner);
         System.out.println("Enter rating: ");
-        int rating = Integer.parseInt(scanner.nextLine());
+        int rating = Helper.integerInput(scanner);
         System.out.println("Enter returnDate (YYYY-MM-DD): ");
         String dateString = scanner.nextLine();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -454,8 +454,11 @@ public class LibraryManagementSystem {
 
     private static void addAccountBalance(Student student) {
         System.out.println("Add the amount to add in your account: ");
-        int amount = scanner.nextInt();
-        scanner.nextLine();
+        int amount = Helper.integerInput(scanner);
+        if (amount < 0) {
+            System.out.println("Negative amount cannot be added");
+            return;
+        }
 
         student.setAccountBalance(student.getAccountBalance() + amount);
         studentDAO.updateStudent(student);

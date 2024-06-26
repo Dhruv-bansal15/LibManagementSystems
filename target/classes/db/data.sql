@@ -17,6 +17,6 @@ INSERT INTO student (studentId, name, username, password, accountBalance, numIss
 INSERT INTO student (studentId, name, username, password, accountBalance, numIssuedBooks) VALUES (2, 'Danielle Blue', 'danielle', 'danielle123', 10, 2);
 
 -- Insert data into transaction table
-INSERT INTO transaction (transactionId, studentId, bookId, issueDate, returnDate, fine, rating) VALUES (1, 1, 1, TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2023-06-10', 'YYYY-MM-DD'), 0, 4.5);
-INSERT INTO transaction (transactionId, studentId, bookId, issueDate, returnDate, fine, rating) VALUES (2, 2, 2, TO_DATE('2023-06-05', 'YYYY-MM-DD'), TO_DATE('2023-06-15', 'YYYY-MM-DD'), 5, 4.7);
-INSERT INTO transaction (transactionId, studentId, bookId, issueDate, returnDate, fine, rating) VALUES (3, 2, 3, TO_DATE('2023-06-12', 'YYYY-MM-DD'), NULL, 0, NULL);
+INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (1, 1, TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2023-06-10', 'YYYY-MM-DD'), 0, 4.5);
+INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (2, 2, TO_DATE('2023-06-05', 'YYYY-MM-DD'), TO_DATE('2023-06-15', 'YYYY-MM-DD'), 5, 4.7);
+INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (2, 3, TO_DATE('2023-06-12', 'YYYY-MM-DD'), NULL, 0, NULL);
