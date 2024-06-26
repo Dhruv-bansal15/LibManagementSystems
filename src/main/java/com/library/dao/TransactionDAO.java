@@ -50,19 +50,19 @@ public class TransactionDAO {
 
     public List<Transaction> getTransactionsByStudentId(int studentId) {
         List<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT * FROM transaction WHERE student_id = ?";
+        String query = "SELECT * FROM transaction WHERE studentId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, studentId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Transaction transaction = new Transaction(
-                        resultSet.getInt("transaction_id"),
-                        resultSet.getInt("student_id"),
-                        resultSet.getInt("book_id"),
-                        resultSet.getDate("issue_date"),
-                        resultSet.getDate("return_date"),
-                        resultSet.getDouble("fine"),
+                        resultSet.getInt("transactionId"),
+                        resultSet.getInt("studentId"),
+                        resultSet.getInt("bookId"),
+                        resultSet.getDate("issueDate"),
+                        resultSet.getDate("returnDate"),
+                        resultSet.getInt("fine"),
                         resultSet.getInt("rating")
                 );
                 transactions.add(transaction);

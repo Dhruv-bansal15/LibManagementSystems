@@ -1,16 +1,17 @@
 // src/main/java/dao/StudentDAO.java
 package com.library.dao;
 
+// import com.library.model.Librarian;
 import com.library.model.Student;
-import com.library.model.Transaction;
+// import com.library.model.Transaction;
 import com.library.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+// import java.util.ArrayList;
+// import java.util.List;
 
 public class StudentDAO {
 
@@ -88,29 +89,60 @@ public class StudentDAO {
     }
     
 
-    public List<Transaction> getIssuedBooksForStudent(int studentId) {
-        List<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT t.transaction_id, t.book_id, t.issue_date, t.return_date, t.fine, t.rating " +
-                       "FROM transaction t " +
-                       "WHERE t.student_id = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, studentId);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int transactionId = resultSet.getInt("transaction_id");
-                int bookId = resultSet.getInt("book_id");
-                java.sql.Date issueDate = resultSet.getDate("issue_date");
-                java.sql.Date returnDate = resultSet.getDate("return_date");
-                double fine = resultSet.getDouble("fine");
-                int rating = resultSet.getInt("rating");
+    // public List<Transaction> getIssuedBooksForStudent(int studentId) {
+    //     List<Transaction> transactions = new ArrayList<>();
+    //     String query = "SELECT t.transaction_id, t.book_id, t.issue_date, t.return_date, t.fine, t.rating " +
+    //                    "FROM transaction t " +
+    //                    "WHERE t.student_id = ?";
+    //     try (Connection connection = DatabaseConnection.getConnection();
+    //          PreparedStatement statement = connection.prepareStatement(query)) {
+    //         statement.setInt(1, studentId);
+    //         ResultSet resultSet = statement.executeQuery();
+    //         while (resultSet.next()) {
+    //             int transactionId = resultSet.getInt("transaction_id");
+    //             int bookId = resultSet.getInt("book_id");
+    //             java.sql.Date issueDate = resultSet.getDate("issue_date");
+    //             java.sql.Date returnDate = resultSet.getDate("return_date");
+    //             int fine = resultSet.getInt("fine");
+    //             int rating = resultSet.getInt("rating");
 
-                Transaction transaction = new Transaction(transactionId, studentId, bookId, issueDate, returnDate, fine, rating);
-                transactions.add(transaction);
+    //             Transaction transaction = new Transaction(transactionId, studentId, bookId, issueDate, returnDate, fine, rating);
+    //             transactions.add(transaction);
+    //         }
+    //     } catch (SQLException ex) {
+    //         System.out.println("Error occured: " + ex.getMessage());
+    //     }
+    //     return transactions;
+    // }
+
+    public Student getStudentByUsernameAndPassword(String username, String password) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Student student = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String query = "SELECT * FROM student WHERE username = ? AND password = ?";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int studentId = rs.getInt("studentId");
+                String name = rs.getString("name");
+                int accountBalance = rs.getInt("accountBalance");
+                int numIssuedBooks = rs.getInt("numIssuedBooks");
+
+                student = new Student(studentId, name, username, password, accountBalance, numIssuedBooks);
             }
         } catch (SQLException ex) {
             System.out.println("Error occured: " + ex.getMessage());
+        } finally {
+            DatabaseConnection.closeResources(conn, stmt, rs);
         }
-        return transactions;
+
+        return student;
     }
 }

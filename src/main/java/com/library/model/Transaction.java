@@ -8,7 +8,7 @@ public class Transaction {
     private int bookId;
     private Date issueDate;
     private Date returnDate;
-    private double fine;
+    private int fine;
     private int rating;
 
     // Constructor for creating a new Transaction instance
@@ -20,7 +20,7 @@ public class Transaction {
     }
 
     // Constructor with transactionId for fetching existing Transaction from the database
-    public Transaction(int transactionId, int studentId, int bookId, Date issueDate, Date returnDate, double fine, int rating) {
+    public Transaction(int transactionId, int studentId, int bookId, Date issueDate, Date returnDate, int fine, int rating) {
         this.transactionId = transactionId;
         this.studentId = studentId;
         this.bookId = bookId;
@@ -71,11 +71,11 @@ public class Transaction {
         this.returnDate = returnDate;
     }
 
-    public double getFine() {
+    public int getFine() {
         return fine;
     }
 
-    public void setFine(double fine) {
+    public void setFine(int fine) {
         this.fine = fine;
     }
 
