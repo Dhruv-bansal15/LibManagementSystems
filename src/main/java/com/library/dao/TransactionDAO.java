@@ -12,12 +12,16 @@ import java.util.List;
 public class TransactionDAO {
 
     public boolean addTransaction(Transaction transaction) {
-        String query = "INSERT INTO transaction (student_id, book_id, issue_date) VALUES (?, ?, ?)";
+        String query = "INSERT INTO transaction (transactionId, studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, transaction.getStudentId());
-            statement.setInt(2, transaction.getBookId());
-            statement.setDate(3, new java.sql.Date(transaction.getIssueDate().getTime()));
+                statement.setInt(1, transaction.getTransactionId());
+            statement.setInt(2, transaction.getStudentId());
+            statement.setInt(3, transaction.getBookId());
+            statement.setDate(4, new java.sql.Date(transaction.getIssueDate().getTime()));
+            statement.setDate(5, null);
+            statement.setDate(6, null);
+            statement.setDate(7, null);
             
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
