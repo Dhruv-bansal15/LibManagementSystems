@@ -103,35 +103,34 @@ public class LibrarianDAO {
 
     // Method to update an existing librarian in the database
     // public boolean updateLibrarian(Librarian librarian) {
-    //     Connection conn = null;
-    //     PreparedStatement stmt = null;
-    //     boolean success = false;
+    // Connection conn = null;
+    // PreparedStatement stmt = null;
+    // boolean success = false;
 
-    //     try {
-    //         conn = DatabaseConnection.getConnection();
-    //         String query = "UPDATE librarians SET username = ?, password = ?, name = ?, is_verified = ?, section_id = ? WHERE librarian_id = ?";
-    //         stmt = conn.prepareStatement(query);
-    //         stmt.setString(1, librarian.getUsername());
-    //         stmt.setString(2, librarian.getPassword());
-    //         stmt.setString(3, librarian.getName());
-    //         stmt.setBoolean(4, librarian.isVerified());
-    //         stmt.setInt(5, librarian.getSectionId());
-    //         stmt.setInt(6, librarian.getLibrarianId());
+    // try {
+    // conn = DatabaseConnection.getConnection();
+    // String query = "UPDATE librarians SET username = ?, password = ?, name = ?,
+    // is_verified = ?, section_id = ? WHERE librarian_id = ?";
+    // stmt = conn.prepareStatement(query);
+    // stmt.setString(1, librarian.getUsername());
+    // stmt.setString(2, librarian.getPassword());
+    // stmt.setString(3, librarian.getName());
+    // stmt.setBoolean(4, librarian.isVerified());
+    // stmt.setInt(5, librarian.getSectionId());
+    // stmt.setInt(6, librarian.getLibrarianId());
 
-    //         int rowsUpdated = stmt.executeUpdate();
-    //         if (rowsUpdated > 0) {
-    //             success = true;
-    //         }
-    //     } catch (SQLException ex) {
-    //         ex.printStackTrace();
-    //     } finally {
-    //         DatabaseConnection.closeResources(conn, stmt);
-    //     }
-
-    //     return success;
+    // int rowsUpdated = stmt.executeUpdate();
+    // if (rowsUpdated > 0) {
+    // success = true;
+    // }
+    // } catch (SQLException ex) {
+    // ex.printStackTrace();
+    // } finally {
+    // DatabaseConnection.closeResources(conn, stmt);
     // }
 
-    
+    // return success;
+    // }
 
     // Method to delete a librarian from the database
     public boolean deleteLibrarian(int librarianId) {
@@ -156,4 +155,31 @@ public class LibrarianDAO {
 
         return success;
     }
+
+    public void viewAllLibrarians() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+            String query = "SELECT librarianId, name, sectionId FROM librarian";
+            stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int librarianId = rs.getInt("librarianId");
+                String name = rs.getString("name");
+                int sectionId = rs.getInt("sectionId");
+
+                System.out.println("ID: " + librarianId  + ", Name: " + name + ", Section ID: " + sectionId);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+        } finally {
+            DatabaseConnection.closeResources(conn, stmt);
+        }
+
+        return;
+    }
+
 }

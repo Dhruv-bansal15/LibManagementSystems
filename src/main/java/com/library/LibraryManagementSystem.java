@@ -115,6 +115,7 @@ public class LibraryManagementSystem {
             System.out.println("1- Add Librarian");
             System.out.println("2- Add New Admin");
             System.out.println("3- Delete Librarian");
+            System.out.println("4- View all librarians");
             System.out.println("0- Logout");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -129,6 +130,8 @@ public class LibraryManagementSystem {
                 case 3:
                     deleteLibrarian();
                     break;
+                case 4:
+                    viewAllLibrarians();
                 case 0:
                     authService.logout();
                     System.out.println("Logged out.");
@@ -303,6 +306,10 @@ public class LibraryManagementSystem {
         } else {
             System.out.println("error");
         }
+    }
+
+    private static void viewAllLibrarians() {
+        librarianDAO.viewAllLibrarians();
     }
 
     // private static void updateStudent() {
