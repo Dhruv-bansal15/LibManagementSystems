@@ -132,10 +132,10 @@ public class LibraryManagementSystem {
                     break;
                 case 4:
                     viewAllLibrarians();
+                    break;
                 case 0:
                     authService.logout();
                     System.out.println("Logged out.");
-                    LibraryManagementSystem.main(null);
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -148,12 +148,11 @@ public class LibraryManagementSystem {
             System.out.println("Librarian Menu: ");
             System.out.println("1- Add Student");
             System.out.println("2- Delete Student");
-            // System.out.println("3- Update Student");
-            System.out.println("4- Add Book");
-            System.out.println("5- Delete Book");
-            System.out.println("6- Update Book");
-            System.out.println("7- Issue Books to Students");
-            System.out.println("8- Return Books from Students");
+            System.out.println("3- Add Book");
+            System.out.println("4- Delete Book");
+            System.out.println("5- Update Book");
+            System.out.println("6- Issue Books to Students");
+            System.out.println("7- Return Books from Students");
             System.out.println("0- Logout");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -165,25 +164,24 @@ public class LibraryManagementSystem {
                 case 2:
                     deleteStudent();
                     break;
-                case 4:
+                case 3:
                     addBook();
                     break;
-                case 5:
+                case 4:
                     deleteBook();
                     break;
-                case 6:
+                case 5:
                     updateBook();
                     break;
-                case 7:
+                case 6:
                     issueBook();
                     break;
-                case 8:
+                case 7:
                     returnBook();
                     break;
                 case 0:
                     authService.logout();
                     System.out.println("Logged out.");
-                    LibraryManagementSystem.main(null);
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -214,7 +212,6 @@ public class LibraryManagementSystem {
                 case 0:
                     authService.logout();
                     System.out.println("Logged out.");
-                    LibraryManagementSystem.main(null);
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
@@ -237,7 +234,7 @@ public class LibraryManagementSystem {
 
         if (librarianDAO.addLibrarian(temp)) {
             System.out.println("librarian added successfully");
-            adminMenu();
+            return;
         } else {
             System.out.println("Librarin cannot be added, some error occured");
         }
@@ -250,7 +247,7 @@ public class LibraryManagementSystem {
         boolean ans = librarianDAO.deleteLibrarian(librarianId);
         if (ans) {
             System.out.println("librarian deleted successfully");
-            adminMenu();
+            return;
         } else {
             System.out.println("invalid librarian id");
         }
@@ -270,7 +267,7 @@ public class LibraryManagementSystem {
 
         if (adminDAO.addAdmin(temp)) {
             System.out.println("admin added successfully");
-            adminMenu();
+            return;
         } else {
             System.out.println("admin cannot be added, some error occured");
         }
@@ -289,7 +286,7 @@ public class LibraryManagementSystem {
         Student temp = new Student(studentId, name, username, password);
         if (studentDAO.addStudent(temp)) {
             System.out.println("student added successfully");
-            librarianMenu();
+            return;
         } else {
             System.out.println("student cannot be added, some error occured");
         }
@@ -302,7 +299,7 @@ public class LibraryManagementSystem {
 
         if (studentDAO.deleteStudent(studentId)) {
             System.out.println("student deleted successfully");
-            librarianMenu();
+            return;
         } else {
             System.out.println("error");
         }
@@ -325,7 +322,7 @@ public class LibraryManagementSystem {
     // Student temp = new Student(studentId, name, accountBalance, numIssuedBooks);
     // if (studentDAO.updateStudent(studentId)) {
     // System.out.println("student deleted successfully");
-    // librarianMenu();
+    // return;
     // } else {
     // System.out.println("error");
     // }
@@ -347,7 +344,7 @@ public class LibraryManagementSystem {
         Book temp = new Book(bookId, title, author, sectionId, availableCopies);
         if (bookDAO.addBook(temp)) {
             System.out.println("book added successfully");
-            librarianMenu();
+            return;
         } else {
             System.out.println("book already exists or some other credentials are wrong");
         }
@@ -361,7 +358,7 @@ public class LibraryManagementSystem {
 
         if (bookDAO.deleteBook(bookId)) {
             System.out.println("book deleted successfully");
-            librarianMenu();
+            return;
         } else {
             System.out.println("invalid bookId");
         }
@@ -381,7 +378,7 @@ public class LibraryManagementSystem {
         Book temp = new Book(bookId, availableCopies, rating, numIssues);
         if (bookDAO.updateBook(temp)) {
             System.out.println("book updated successfully");
-            librarianMenu();
+            return;
         } else {
             System.out.println("book credentials are wrong");
         }
@@ -406,7 +403,7 @@ public class LibraryManagementSystem {
         Transaction temp = new Transaction(studentId, bookId, issueDate);
         if (transactionDAO.addTransaction(temp)) {
             System.out.println("Book: " + bookDAO.getTitleById(bookId) + "| issued to Student: " + studentDAO.getNameById(studentId) + "| on Date: " + Helper.formatDate(issueDate));
-            librarianMenu();
+            return;
         }
 
     }
@@ -430,7 +427,7 @@ public class LibraryManagementSystem {
 
         if (transactionDAO.returnBook(studentId, bookId, returnDate, rating)) {
             System.out.println("transaction updated successfully");
-            librarianMenu();
+            return;
         } else {
             System.out.println("book is not yet issued");
         }
