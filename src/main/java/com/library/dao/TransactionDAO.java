@@ -4,32 +4,35 @@ import com.library.model.Transaction;
 import com.library.util.DatabaseConnection;
 
 import java.sql.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+// import java.util.Date ;
 
 // In transaction table, use DATE type for all the date fields
 
 public class TransactionDAO {
-    private static StudentDAO studentDAO;
+    private static StudentDAO studentDAO = new StudentDAO();
 
     public boolean addTransaction(Transaction transaction) {
         String query1 = "INSERT INTO transaction (transactionId, studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
         String query2 = "Update student SET numIssuedBooks = ? WHERE studentId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query1)) {
+            PreparedStatement statement1 = connection.prepareStatement(query2);
+            PreparedStatement statement = connection.prepareStatement(query1)) {
             statement.setInt(1, transaction.getTransactionId());
             statement.setInt(2, transaction.getStudentId());
             statement.setInt(3, transaction.getBookId());
             statement.setDate(4, new java.sql.Date(transaction.getIssueDate().getTime()));
             statement.setDate(5, null);
-            statement.setDate(6, null);
-            statement.setDate(7, null);
+            statement.setInt(6, 0);
+            statement.setInt(7, -1);
             int rowsInserted = statement.executeUpdate();
             int ans = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
-            PreparedStatement statement1 = connection.prepareStatement(query2);
-            statement1.setInt(1, transaction.getStudentId());
-            statement1.setInt(2, ans);
+            
+            statement1.setInt(1, ans + 1);
+            statement1.setInt(2, transaction.getStudentId());
 
             int rowsInserted1 = statement1.executeUpdate();
             return rowsInserted > 0 && rowsInserted1 > 0;
@@ -39,7 +42,7 @@ public class TransactionDAO {
         }
     }
 
-    public boolean returnBook(int studentId, int bookId, Date returnDate, int rating) {
+    public boolean returnBook(int studentId, int bookId, java.util.Date returnDate, int rating) {
         String selectQuery = "SELECT issueDate FROM transaction WHERE studentId = ? AND bookId = ?";
         String updateTransactionQuery = "UPDATE transaction SET returnDate = ?, fine = ?, rating = ? WHERE studentId = ? AND bookId = ?";
         String updateStudentQuery = "UPDATE student SET accountBalance = accountBalance + ? WHERE studentId = ?";
@@ -59,7 +62,8 @@ public class TransactionDAO {
                 return false;
             }
 
-            Date issueDate = resultSet.getDate("issueDate");
+            java.sql.Date issueDateTemp = resultSet.getDate("issueDate");
+            java.util.Date issueDate = new Date(issueDateTemp.getTime()); 
             long diffInMillies = returnDate.getTime() - issueDate.getTime();
             long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 

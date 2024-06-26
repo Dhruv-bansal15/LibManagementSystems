@@ -407,16 +407,14 @@ public class LibraryManagementSystem {
         System.out.println("Enter IssueDate (YYYY-MM-DD): ");
         String dateString = scanner.nextLine();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date issueDate = null;
+        java.util.Date issueDate = null;
         try {
             issueDate = dateFormat.parse(dateString);
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
         }
 
-        java.sql.Date sqlDate = new java.sql.Date(issueDate.getTime());
-
-        Transaction temp = new Transaction(transactionId, studentId, bookId, sqlDate);
+        Transaction temp = new Transaction(transactionId, studentId, bookId, issueDate);
         if (transactionDAO.addTransaction(temp)) {
             System.out.println("transaction added successfully");
             librarianMenu();
@@ -436,16 +434,14 @@ public class LibraryManagementSystem {
         System.out.println("Enter returnDate (YYYY-MM-DD): ");
         String dateString = scanner.nextLine();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date returnDate = null;
+        java.util.Date returnDate = null;
         try {
             returnDate = dateFormat.parse(dateString);
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
         }
 
-        java.sql.Date sqlDate = new java.sql.Date(returnDate.getTime());
-
-        if (transactionDAO.returnBook(studentId, bookId, sqlDate, rating)) {
+        if (transactionDAO.returnBook(studentId, bookId, returnDate, rating)) {
             System.out.println("transaction updated successfully");
             librarianMenu();
         } else {
