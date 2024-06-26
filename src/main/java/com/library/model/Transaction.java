@@ -12,12 +12,12 @@ public class Transaction {
     private int rating;
 
     // Constructor for creating a new Transaction instance
-    public Transaction(int transactionId, int studentId, int bookId, Date issueDate) {
-        this.transactionId = transactionId;
-        this.studentId = studentId;
-        this.bookId = bookId;
-        this.issueDate = issueDate;
-    }
+    // public Transaction(int transactionId, int studentId, int bookId, Date issueDate) {
+    //     this.transactionId = transactionId;
+    //     this.studentId = studentId;
+    //     this.bookId = bookId;
+    //     this.issueDate = issueDate;
+    // }
 
     // Constructor with transactionId for fetching existing Transaction from the database
     public Transaction(int transactionId, int studentId, int bookId, Date issueDate, Date returnDate, int fine, int rating) {
@@ -28,6 +28,12 @@ public class Transaction {
         this.returnDate = returnDate;
         this.fine = fine;
         this.rating = rating;
+    }
+
+    public Transaction(int studentId, int bookId, Date issueDate) {
+        this.studentId = studentId;
+        this.bookId = bookId;
+        this.issueDate = issueDate;
     }
 
     // Getters and Setters

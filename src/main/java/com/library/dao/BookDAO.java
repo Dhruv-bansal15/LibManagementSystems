@@ -112,4 +112,21 @@ public class BookDAO {
             return false;
         }
     }
+
+    public String getTitleById(int bookId) {
+        String query = "SELECT title FROM book WHERE bookId = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, bookId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String title = rs.getString("title");
+                    return title;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+        }
+        return "";
+    }
 }

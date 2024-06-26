@@ -15,6 +15,8 @@ import com.library.dao.LibrarianDAO;
 import com.library.dao.StudentDAO;
 import com.library.dao.TransactionDAO;
 import com.library.dao.BookDAO;
+import com.library.util.Helper;
+
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
@@ -380,8 +382,6 @@ public class LibraryManagementSystem {
     }
 
     private static void issueBook() {
-        System.out.println("Enter Transaction Id: ");
-        int transactionId = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter StudentId: ");
         int studentId = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter BookId: ");
@@ -396,12 +396,10 @@ public class LibraryManagementSystem {
             System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
         }
 
-        Transaction temp = new Transaction(transactionId, studentId, bookId, issueDate);
+        Transaction temp = new Transaction(studentId, bookId, issueDate);
         if (transactionDAO.addTransaction(temp)) {
-            System.out.println("transaction added successfully");
+            System.out.println("Book: " + bookDAO.getTitleById(bookId) + "| issued to Student: " + studentDAO.getNameById(studentId) + "| on Date: " + Helper.formatDate(issueDate));
             librarianMenu();
-        } else {
-            System.out.println("transaction cannot be added, some error occured");
         }
 
     }

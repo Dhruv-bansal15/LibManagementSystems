@@ -33,7 +33,7 @@ CREATE TABLE student (
 );
 
 CREATE TABLE transaction (
-    transactionId NUMBER,
+    transactionId NUMBER GENERATED ALWAYS AS IDENTITY,
     studentId NUMBER,
     bookId NUMBER,
     issueDate DATE,

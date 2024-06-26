@@ -179,4 +179,21 @@ public class StudentDAO {
 
         return student;
     }
+
+    public String getNameById(int studentId) {
+        String query = "SELECT name FROM student WHERE studentId = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("name");
+                    return name;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+        }
+        return "";
+    }
 }

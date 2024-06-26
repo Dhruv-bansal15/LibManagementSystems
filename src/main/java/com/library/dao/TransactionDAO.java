@@ -17,23 +17,27 @@ public class TransactionDAO {
     private static StudentDAO studentDAO = new StudentDAO();
 
     public boolean addTransaction(Transaction transaction) {
-        String query1 = "INSERT INTO transaction (transactionId, studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query1 = "INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?)";
         String query2 = "Update student SET numIssuedBooks = ? WHERE studentId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
             PreparedStatement statement1 = connection.prepareStatement(query2);
             PreparedStatement statement = connection.prepareStatement(query1)) {
-            statement.setInt(1, transaction.getTransactionId());
-            statement.setInt(2, transaction.getStudentId());
-            statement.setInt(3, transaction.getBookId());
-            statement.setDate(4, new java.sql.Date(transaction.getIssueDate().getTime()));
-            statement.setDate(5, null);
-            statement.setInt(6, 0);
-            statement.setInt(7, -1);
+            statement.setInt(1, transaction.getStudentId());
+            statement.setInt(2, transaction.getBookId());
+            statement.setDate(3, new java.sql.Date(transaction.getIssueDate().getTime()));
+            statement.setDate(4, null);
+            statement.setInt(5, 0);
+            statement.setInt(6, -1);
 
 
             int tempAccountBalance = studentDAO.getAccountBalanceById(transaction.getStudentId());
             int tempNumIssuedBooks = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
-            if(tempAccountBalance < 0 || tempNumIssuedBooks >= 5){
+            if (tempNumIssuedBooks >= 5){
+                System.out.println("Student cannot issue any more books");
+                return false;
+            }
+            if (tempAccountBalance < 0) {
+                System.out.println("Student must pay their remaining fine first");
                 return false;
             }
             
