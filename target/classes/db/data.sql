@@ -3,8 +3,8 @@ INSERT INTO admin (adminId, username, password, name) VALUES (1, 'admin1', 'pass
 INSERT INTO admin (adminId, username, password, name) VALUES (2, 'admin2', 'pass456', 'Jane Smith');
 
 -- Insert data into librarian table
-INSERT INTO librarian (librarianId, username, password, name, sectionId) VALUES (1, 'librarian1', 'libpass1', 'Alice Johnson', 1);
-INSERT INTO librarian (librarianId, username, password, name, sectionId) VALUES (2, 'librarian2', 'libpass2', 'Bob Brown', 2);
+INSERT INTO librarian (username, password, name, sectionId) VALUES ('librarian1', 'libpass1', 'Alice Johnson', 1);
+INSERT INTO librarian (username, password, name, sectionId) VALUES ('librarian2', 'libpass2', 'Bob Brown', 2);
 
 -- Insert data into book table
 INSERT INTO book (bookId, title, author, sectionId, availableCopies, rating, numIssues) VALUES (1, 'The Great Gatsby', 'F. Scott Fitzgerald', 1, 5, 4.5, 10);

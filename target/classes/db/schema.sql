@@ -6,7 +6,7 @@ CREATE TABLE admin (
 );
 
 CREATE TABLE librarian (
-    librarianId NUMBER,
+    librarianId NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     username VARCHAR2(50),
     password VARCHAR2(50),
     name VARCHAR2(50),
@@ -33,7 +33,7 @@ CREATE TABLE student (
 );
 
 CREATE TABLE transaction (
-    transactionId NUMBER,
+    transactionId NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     studentId NUMBER,
     bookId NUMBER,
     issueDate DATE,
