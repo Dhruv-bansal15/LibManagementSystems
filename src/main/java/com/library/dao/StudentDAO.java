@@ -196,4 +196,20 @@ public class StudentDAO {
         }
         return "";
     }
+
+    public boolean updateAccountBalanceById(int fine, int studentId) {
+        String updateStudentQuery = "UPDATE student SET accountBalance = accountBalance - ?, numIssuedBooks = numIssuedBooks - 1 WHERE studentId = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement studentUpdateStatement = conn.prepareStatement(updateStudentQuery)) {
+            studentUpdateStatement.setInt(1, fine);
+            studentUpdateStatement.setInt(2, studentId);
+
+            int rowsUpdated = studentUpdateStatement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return false;
+        }
+
+    }
 }

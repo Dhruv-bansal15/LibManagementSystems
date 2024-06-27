@@ -5,12 +5,18 @@ import java.util.Scanner;
 
 import com.library.exception.NegativeNumberException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Helper {
-    public static String formatDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+    public static String outputDateFormat(Date date) {
         return format.format(date);
+    }
+
+    public static Date inputDateFormat(String dateString) throws ParseException {
+        return format.parse(dateString);
     }
 
     public static int integerInput(Scanner scanner) {

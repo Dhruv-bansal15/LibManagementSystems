@@ -3,9 +3,10 @@ package com.library.dao;
 import com.library.model.Transaction;
 import com.library.model.studentTransaction;
 import com.library.util.DatabaseConnection;
+import com.library.util.Helper;
+import com.library.config.Constants;
 
 import java.sql.*;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -15,12 +16,13 @@ import java.util.concurrent.TimeUnit;
 
 public class TransactionDAO {
     private static StudentDAO studentDAO = new StudentDAO();
+    private static BookDAO bookDAO = new BookDAO();
 
     public boolean addTransaction(Transaction transaction) {
         String insertTransactionQuery = "INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?)";
         String updateStudentQuery = "Update student SET numIssuedBooks = ? WHERE studentId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement transactionStatement = connection.prepareStatement(insertTransactionQuery)) {
+                PreparedStatement transactionStatement = connection.prepareStatement(insertTransactionQuery)) {
             PreparedStatement studentStatement = connection.prepareStatement(updateStudentQuery);
             transactionStatement.setInt(1, transaction.getStudentId());
             transactionStatement.setInt(2, transaction.getBookId());
@@ -32,7 +34,7 @@ public class TransactionDAO {
             int numIssuedBooks = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
             int accountBalance = studentDAO.getAccountBalanceById(transaction.getStudentId());
 
-            if (numIssuedBooks >= 5){
+            if (numIssuedBooks >= Constants.MAX_ISSUED_BOOKS) {
                 System.out.println("Student cannot issue any more books");
                 return false;
             }
@@ -40,14 +42,14 @@ public class TransactionDAO {
                 System.out.println("Student must pay their remaining fine first");
                 return false;
             }
-            
+
             int transactionRowsInserted = transactionStatement.executeUpdate();
-            
+
             studentStatement.setInt(1, numIssuedBooks + 1);
             studentStatement.setInt(2, transaction.getStudentId());
 
             int studentRowsInserted = studentStatement.executeUpdate();
-            return studentRowsInserted > 0 && transactionRowsInserted  > 0;
+            return studentRowsInserted > 0 && transactionRowsInserted > 0;
         } catch (SQLException ex) {
             System.out.println("Error occured: " + ex.getMessage());
             return false;
@@ -55,34 +57,38 @@ public class TransactionDAO {
     }
 
     public boolean returnBook(int studentId, int bookId, java.util.Date returnDate, int rating) {
-        String selectQuery = "SELECT issueDate FROM transaction WHERE studentId = ? AND bookId = ?";
+        String selectQuery = "SELECT t.issueDate, b.title, s.name  FROM transaction t INNER JOIN book b on t.bookId = b.bookId INNER JOIN student s on t.studentId = s.studentId WHERE t.studentId = ? AND t.bookId = ?";
         String updateTransactionQuery = "UPDATE transaction SET returnDate = ?, fine = ?, rating = ? WHERE studentId = ? AND bookId = ?";
-        String updateStudentQuery = "UPDATE student SET accountBalance = accountBalance - ? WHERE studentId = ?";
-        String updateBookRatingQuery = "UPDATE book SET rating = ( rating + ? )/2 WHERE bookId = ?";
+        // String updateStudentQuery = "UPDATE student SET accountBalance = accountBalance - ? WHERE studentId = ?";
+        // String updateBookRatingQuery = "UPDATE book SET rating = ( rating + ? )/2 WHERE bookId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
-                PreparedStatement updateTransactionStatement = connection.prepareStatement(updateTransactionQuery);
-                PreparedStatement updateBookRatingStatement = connection.prepareStatement(updateBookRatingQuery);
-                PreparedStatement updateStudentStatement = connection.prepareStatement(updateStudentQuery)) {
+                PreparedStatement updateTransactionStatement = connection.prepareStatement(updateTransactionQuery)) {
 
             selectStatement.setInt(1, studentId);
             selectStatement.setInt(2, bookId);
+
             ResultSet resultSet = selectStatement.executeQuery();
 
             if (!resultSet.next()) {
-                System.out.println("No transaction found for the given studentId and bookId.");
+                System.out.println("No issuing transaction found for the studentId: " + studentId + " and bookId:" + bookId);
                 return false;
             }
 
-            java.sql.Date issueDateTemp = resultSet.getDate("issueDate");
-            java.util.Date issueDate = new Date(issueDateTemp.getTime()); 
+            java.sql.Date sqlIssueDate = resultSet.getDate("issueDate");
+            String bookTitle = resultSet.getString("title");
+            String studentName = resultSet.getString("name");
+            java.util.Date issueDate = new Date(sqlIssueDate.getTime());
+
+            if (returnDate.before(issueDate)) {
+                System.out.println("Return date cannot be before issue date.");
+                return false;
+            }
+
             long diffInMillies = returnDate.getTime() - issueDate.getTime();
             long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-            int fine = 0;
-            if (diffInDays > 15) {
-                fine = (int) (diffInDays - 15) * 10;
-            }
+            int fine = calculateFine(diffInDays);
 
             // Update the transaction table
             updateTransactionStatement.setDate(1, new java.sql.Date(returnDate.getTime()));
@@ -93,29 +99,16 @@ public class TransactionDAO {
 
             int rowsUpdated = updateTransactionStatement.executeUpdate();
             if (rowsUpdated <= 0) {
-                System.out.println("Failed to update transaction table.");
+                System.out.println("System failed to return the book");
                 return false;
             }
+            // Update student table
+            studentDAO.updateAccountBalanceById(fine, studentId);
+            // Update book table
+            bookDAO.updateBookRatingById(rating, bookId);
 
-            // Update the student table
-            updateStudentStatement.setDouble(1, fine);
-            updateStudentStatement.setInt(2, studentId);
-
-            int studentRowsUpdated = updateStudentStatement.executeUpdate();
-            if (studentRowsUpdated <= 0) {
-                System.out.println("Failed to update student table.");
-                return false;
-            }
-
-            updateBookRatingStatement.setInt(1, rating);
-            updateBookRatingStatement.setInt(2, bookId);
-
-            int bookRowsUpdated = updateBookRatingStatement.executeUpdate();
-            if (bookRowsUpdated <= 0) {
-                System.out.println("Failed to update book table.");
-                return false;
-            }
-
+            System.out.println("Book: " + bookTitle + "| returned by Student: " + studentName + "on Date: " + Helper.outputDateFormat(returnDate));
+            System.out.println("Fine charged for this transaction: $" + fine);
             return true;
         } catch (SQLException ex) {
             System.out.println("Error occured: " + ex.getMessage());
@@ -132,13 +125,12 @@ public class TransactionDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 studentTransaction studentTransaction = new studentTransaction(
-                    resultSet.getInt("transactionId"),
-                    resultSet.getString("title"),
-                    resultSet.getDate("issueDate"),
-                    resultSet.getDate("returnDate"),
-                    resultSet.getInt("fine"),
-                    resultSet.getInt("rating")
-                );
+                        resultSet.getInt("transactionId"),
+                        resultSet.getString("title"),
+                        resultSet.getDate("issueDate"),
+                        resultSet.getDate("returnDate"),
+                        resultSet.getInt("fine"),
+                        resultSet.getInt("rating"));
                 studentTransactions.add(studentTransaction);
             }
         } catch (SQLException ex) {
@@ -146,4 +138,13 @@ public class TransactionDAO {
         }
         return studentTransactions;
     }
+
+    private int calculateFine(long diffInDays) {
+        if (diffInDays > Constants.MAX_ISSUE_DAYS) {
+            return (int) (diffInDays - Constants.MAX_ISSUE_DAYS) * Constants.FINE_PER_DAY;
+        } else {
+            return 0;
+        }
+    }
+
 }

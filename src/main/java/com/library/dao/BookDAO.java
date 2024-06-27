@@ -129,4 +129,19 @@ public class BookDAO {
         }
         return "";
     }
+
+    public boolean updateBookRatingById(int bookId, int rating) {
+        String query = "UPDATE book SET rating = (numIssues*rating + ?) / (numIssues+1), numIssues = numIssues+1, availableCopies = availableCopies+1 WHERE bookId = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement bookUpdateStatement = conn.prepareStatement(query)) {
+            bookUpdateStatement.setDouble(1, rating);
+            bookUpdateStatement.setInt(2, bookId);
+            
+            int rowsUpdated = bookUpdateStatement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (Exception ex) {
+            System.out.println("Error occured: " + ex.getMessage());
+            return false;
+        }
+    }
 }

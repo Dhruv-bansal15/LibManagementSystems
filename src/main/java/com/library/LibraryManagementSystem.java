@@ -18,10 +18,9 @@ import com.library.dao.BookDAO;
 import com.library.util.Helper;
 
 import java.util.Scanner;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
 import java.sql.*;
+import java.text.ParseException;
 
 public class LibraryManagementSystem {
     private static Scanner scanner = new Scanner(System.in);
@@ -392,17 +391,17 @@ public class LibraryManagementSystem {
         int bookId = Helper.integerInput(scanner);
         System.out.println("Enter IssueDate (YYYY-MM-DD): ");
         String dateString = scanner.nextLine();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date issueDate = null;
         try {
-            issueDate = dateFormat.parse(dateString);
+            issueDate = Helper.inputDateFormat(dateString);
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
+            return;
         }
 
         Transaction issueTransaction = new Transaction(studentId, bookId, issueDate);
         if (transactionDAO.addTransaction(issueTransaction)) {
-            System.out.println("Book: " + bookDAO.getTitleById(bookId) + "| issued to Student: " + studentDAO.getNameById(studentId) + "| on Date: " + Helper.formatDate(issueDate));
+            System.out.println("Book: " + bookDAO.getTitleById(bookId) + "| issued to Student: " + studentDAO.getNameById(studentId) + "| on Date: " + Helper.outputDateFormat(issueDate));
             return;
         }
 
@@ -411,26 +410,28 @@ public class LibraryManagementSystem {
     private static void returnBook() {
         System.out.println("Enter StudentId: ");
         int studentId = Helper.integerInput(scanner);
+        
         System.out.println("Enter Book Id: ");
         int bookId = Helper.integerInput(scanner);
-        System.out.println("Enter rating: ");
+        
+        System.out.println("Enter rating between 1 and 10: ");
         int rating = Helper.integerInput(scanner);
+        if (rating < 1 || rating > 10){
+            System.out.println("Invalid rating. Please enter an integer value between 1 and 10");
+            return;
+        }
+        
         System.out.println("Enter returnDate (YYYY-MM-DD): ");
         String dateString = scanner.nextLine();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date returnDate = null;
         try {
-            returnDate = dateFormat.parse(dateString);
+            returnDate = Helper.inputDateFormat(dateString);
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
+            return;
         }
 
-        if (transactionDAO.returnBook(studentId, bookId, returnDate, rating)) {
-            System.out.println("transaction updated successfully");
-            return;
-        } else {
-            System.out.println("book is not yet issued");
-        }
+        transactionDAO.returnBook(studentId, bookId, returnDate, rating);
 
     }
 
