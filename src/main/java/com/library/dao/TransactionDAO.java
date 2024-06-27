@@ -17,38 +17,37 @@ public class TransactionDAO {
     private static StudentDAO studentDAO = new StudentDAO();
 
     public boolean addTransaction(Transaction transaction) {
-        String query1 = "INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?)";
-        String query2 = "Update student SET numIssuedBooks = ? WHERE studentId = ?";
+        String insertTransactionQuery = "INSERT INTO transaction (studentId, bookId, issueDate, returnDate, fine, rating) VALUES (?, ?, ?, ?, ?, ?)";
+        String updateStudentQuery = "Update student SET numIssuedBooks = ? WHERE studentId = ?";
         try (Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement statement1 = connection.prepareStatement(query2);
-            PreparedStatement statement = connection.prepareStatement(query1)) {
-            statement.setInt(1, transaction.getStudentId());
-            statement.setInt(2, transaction.getBookId());
-            statement.setDate(3, new java.sql.Date(transaction.getIssueDate().getTime()));
-            statement.setDate(4, null);
-            statement.setInt(5, 0);
-            statement.setInt(6, -1);
+            PreparedStatement transactionStatement = connection.prepareStatement(insertTransactionQuery)) {
+            PreparedStatement studentStatement = connection.prepareStatement(updateStudentQuery);
+            transactionStatement.setInt(1, transaction.getStudentId());
+            transactionStatement.setInt(2, transaction.getBookId());
+            transactionStatement.setDate(3, new java.sql.Date(transaction.getIssueDate().getTime()));
+            transactionStatement.setDate(4, null);
+            transactionStatement.setInt(5, 0);
+            transactionStatement.setInt(6, -1);
 
+            int numIssuedBooks = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
+            int accountBalance = studentDAO.getAccountBalanceById(transaction.getStudentId());
 
-            int tempAccountBalance = studentDAO.getAccountBalanceById(transaction.getStudentId());
-            int tempNumIssuedBooks = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
-            if (tempNumIssuedBooks >= 5){
+            if (numIssuedBooks >= 5){
                 System.out.println("Student cannot issue any more books");
                 return false;
             }
-            if (tempAccountBalance < 0) {
+            if (accountBalance < 0) {
                 System.out.println("Student must pay their remaining fine first");
                 return false;
             }
             
-            int rowsInserted = statement.executeUpdate();
-            int ans = studentDAO.getNumIssuedBooksById(transaction.getStudentId());
+            int transactionRowsInserted = transactionStatement.executeUpdate();
             
-            statement1.setInt(1, ans + 1);
-            statement1.setInt(2, transaction.getStudentId());
+            studentStatement.setInt(1, numIssuedBooks + 1);
+            studentStatement.setInt(2, transaction.getStudentId());
 
-            int rowsInserted1 = statement1.executeUpdate();
-            return rowsInserted > 0 && rowsInserted1 > 0;
+            int studentRowsInserted = studentStatement.executeUpdate();
+            return studentRowsInserted > 0 && transactionRowsInserted  > 0;
         } catch (SQLException ex) {
             System.out.println("Error occured: " + ex.getMessage());
             return false;
@@ -80,14 +79,14 @@ public class TransactionDAO {
             long diffInMillies = returnDate.getTime() - issueDate.getTime();
             long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-            double fine = 0;
+            int fine = 0;
             if (diffInDays > 15) {
-                fine = (diffInDays - 15) * 10;
+                fine = (int) (diffInDays - 15) * 10;
             }
 
             // Update the transaction table
             updateTransactionStatement.setDate(1, new java.sql.Date(returnDate.getTime()));
-            updateTransactionStatement.setDouble(2, fine);
+            updateTransactionStatement.setInt(2, fine);
             updateTransactionStatement.setInt(3, rating);
             updateTransactionStatement.setInt(4, studentId);
             updateTransactionStatement.setInt(5, bookId);

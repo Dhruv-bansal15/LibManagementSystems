@@ -400,8 +400,8 @@ public class LibraryManagementSystem {
             System.out.println("Invalid date format. Please enter a date in YYYY-MM-DD format.");
         }
 
-        Transaction temp = new Transaction(studentId, bookId, issueDate);
-        if (transactionDAO.addTransaction(temp)) {
+        Transaction issueTransaction = new Transaction(studentId, bookId, issueDate);
+        if (transactionDAO.addTransaction(issueTransaction)) {
             System.out.println("Book: " + bookDAO.getTitleById(bookId) + "| issued to Student: " + studentDAO.getNameById(studentId) + "| on Date: " + Helper.formatDate(issueDate));
             return;
         }
@@ -409,10 +409,10 @@ public class LibraryManagementSystem {
     }
 
     private static void returnBook() {
-        System.out.println("Enter Book Id: ");
-        int bookId = Helper.integerInput(scanner);
         System.out.println("Enter StudentId: ");
         int studentId = Helper.integerInput(scanner);
+        System.out.println("Enter Book Id: ");
+        int bookId = Helper.integerInput(scanner);
         System.out.println("Enter rating: ");
         int rating = Helper.integerInput(scanner);
         System.out.println("Enter returnDate (YYYY-MM-DD): ");
