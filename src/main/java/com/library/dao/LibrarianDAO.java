@@ -18,13 +18,12 @@ public class LibrarianDAO {
 
         try {
             conn = DatabaseConnection.getConnection();
-            String query = "INSERT INTO librarian (librarianId, username, password, name, sectionId) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO librarian (username, password, name, sectionId) VALUES (?, ?, ?, ?)";
             stmt = conn.prepareStatement(query);
-            stmt.setInt(1, librarian.getLibrarianId());
-            stmt.setString(2, librarian.getUsername());
-            stmt.setString(3, librarian.getPassword());
-            stmt.setString(4, librarian.getName());
-            stmt.setInt(5, librarian.getSectionId());
+            stmt.setString(1, librarian.getUsername());
+            stmt.setString(2, librarian.getPassword());
+            stmt.setString(3, librarian.getName());
+            stmt.setInt(4, librarian.getSectionId());
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {

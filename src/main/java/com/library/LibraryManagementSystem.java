@@ -219,8 +219,6 @@ public class LibraryManagementSystem {
     }
 
     private static void addNewLibrarian() {
-        System.out.println("Enter librarian Id: ");
-        int librarianId = Helper.integerInput(scanner);
         System.out.println("Enter librarian username: ");
         String username = scanner.nextLine();
         System.out.println("Enter librarian password: ");
@@ -229,9 +227,9 @@ public class LibraryManagementSystem {
         String name = scanner.nextLine();
         System.out.println("Enter librarian sectionId: ");
         int sectionId = Helper.integerInput(scanner);
-        Librarian temp = new Librarian(librarianId, username, password, name, sectionId);
+        Librarian librarian = new Librarian(username, password, name, sectionId);
 
-        if (librarianDAO.addLibrarian(temp)) {
+        if (librarianDAO.addLibrarian(librarian)) {
             System.out.println("librarian added successfully");
             return;
         } else {

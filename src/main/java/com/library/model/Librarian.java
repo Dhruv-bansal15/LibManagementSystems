@@ -13,7 +13,13 @@ public class Librarian {
         this.username = username;
         this.password = password;
         this.name = name;
-        // this.isVerified = isVerified;
+        this.sectionId = sectionId;
+    }
+
+    public Librarian(String username, String password, String name, int sectionId) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
         this.sectionId = sectionId;
     }
 
